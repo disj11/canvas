@@ -13,10 +13,4 @@ export class FabricCanvas {
             height: 30,
         }));
     }
-
-    public destory() {
-        if (this.canvas) {
-            this.canvas.dispose();
-        }
-    }
 }

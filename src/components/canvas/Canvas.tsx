@@ -6,7 +6,7 @@ interface Props {
     options?: fabric.ICanvasOptions;
 }
 
-const CanvasComponent = ({ id, options, ...other }: Props) => {
+const Canvas = ({ id, options, ...other }: Props) => {
     const [canvas, setCanvas] = React.useState<FabricCanvas>();
 
     React.useEffect(() => {
@@ -21,4 +21,4 @@ const CanvasComponent = ({ id, options, ...other }: Props) => {
     )
 }
 
-export default CanvasComponent;
+export default Canvas;
