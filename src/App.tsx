@@ -1,18 +1,13 @@
-import { Canvas } from 'components/canvas';
-import { Layout } from 'components/layout';
+import {Canvas} from 'templates/canvas';
 import React from 'react';
+import {FabricContextProvider} from "./context/FabricContext";
 
 function App() {
-  const [options, setOptions] = React.useState<fabric.ICanvasOptions>({
-    width: 500,
-    height: 500,
-  });
-
-  return (
-    <Layout>
-      <Canvas id="canvas" options={options} />
-    </Layout>
-  );
+    return (
+        <FabricContextProvider>
+            <Canvas/>
+        </FabricContextProvider>
+    );
 }
 
 export default App;
