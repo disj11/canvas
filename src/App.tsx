@@ -1,12 +1,13 @@
-import { CanvasComponent } from 'components/canvas';
+import {Canvas} from 'templates/canvas';
 import React from 'react';
+import {FabricContextProvider} from "./context/FabricContext";
 
 function App() {
-  return (
-    <div className="App">
-      <CanvasComponent id="canvas"/>
-    </div>
-  );
+    return (
+        <FabricContextProvider>
+            <Canvas/>
+        </FabricContextProvider>
+    );
 }
 
 export default App;
