@@ -20,7 +20,7 @@ export const FabricContextProvider = ({children}: FabricContextProviderProps) =>
     )
 }
 
-interface FabricContextModel {
+export interface FabricContextModel {
     canvas: fabric.Canvas,
     initCanvas: (el: HTMLCanvasElement, options?: fabric.ICanvasOptions) => void,
 }
