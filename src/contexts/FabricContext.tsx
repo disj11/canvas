@@ -1,7 +1,7 @@
 import React from "react";
 import {fabric} from "fabric";
 
-export const FabricContext = React.createContext<FabricContextValue>({
+export const FabricContext = React.createContext<FabricContextModel>({
     canvas: new fabric.Canvas(null),
     initCanvas: () => {},
 });
@@ -20,7 +20,7 @@ export const FabricContextProvider = ({children}: FabricContextProviderProps) =>
     )
 }
 
-interface FabricContextValue {
+interface FabricContextModel {
     canvas: fabric.Canvas,
     initCanvas: (el: HTMLCanvasElement, options?: fabric.ICanvasOptions) => void,
 }
