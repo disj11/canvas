@@ -1,11 +1,17 @@
 import React from "react";
-import BrushToolButton from "./BrushToolButton";
 import {AppBar, Toolbar} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {observer} from "mobx-react";
+import {useStores} from "../../hooks/useStores";
+import ToolButton from "./ToolButton";
+import MouseIcon from '@material-ui/icons/Mouse';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import BrushIcon from "@material-ui/icons/Brush";
+import {ToolTypes} from "../../models/canvas/ToolTypes";
 
 const useStyles = makeStyles(() => ({
     appBarColor: {
-        backgroundColor: "#000010",
+        backgroundColor: "rgba(30,30,30,0.95)",
     },
     left: {
         justifyContent: "flex-start",
@@ -20,8 +26,10 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const ToolBox = () => {
+const ToolBox = observer(() => {
     const classes = useStyles();
+    const {canvasStore} = useStores();
+
     return (
         <AppBar
             classes={{
@@ -32,17 +40,32 @@ const ToolBox = () => {
         >
             <Toolbar variant={"dense"}>
                 <div className={classes.left}>
-                    <BrushToolButton/>
                 </div>
                 <div className={classes.center}>
-                    <BrushToolButton/>
+                    <ToolButton
+                        icon={<MouseIcon/>}
+                        text={"선택"}
+                        onClick={() => canvasStore.selectedTool = ToolTypes.SELECT}
+                        selected={canvasStore.selectedTool === ToolTypes.SELECT}
+                    />
+                    <ToolButton
+                        icon={<BrushIcon/>}
+                        text={"브러쉬"}
+                        onClick={() => canvasStore.selectedTool = ToolTypes.BRUSH}
+                        selected={canvasStore.selectedTool === ToolTypes.BRUSH}
+                    />
+                    <ToolButton
+                        icon={<DashboardIcon/>}
+                        text={"셰이프"}
+                        onClick={() => canvasStore.selectedTool = ToolTypes.SHAPE}
+                        selected={canvasStore.selectedTool === ToolTypes.SHAPE}
+                    />
                 </div>
                 <div className={classes.right}>
-                    <BrushToolButton/>
                 </div>
             </Toolbar>
         </AppBar>
     )
-}
+})
 
 export default ToolBox;

@@ -3,9 +3,8 @@ import {Layout} from "../layout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
-import {Button, Toolbar} from "@material-ui/core";
+import {Toolbar} from "@material-ui/core";
 import {useStores} from "../../hooks/useStores";
-import {fabric} from "fabric";
 
 const leftMenuWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 const Canvas = observer(() => {
     const classes = useStyles();
     const {canvasStore} = useStores();
-    const {canvas} = canvasStore;
 
     React.useEffect(() => {
         const el = document.getElementById(canvasStore.canvasId) as HTMLCanvasElement;
@@ -48,14 +46,8 @@ const Canvas = observer(() => {
             height: canvasStore.height,
             backgroundColor: canvasStore.backgroundColor,
         });
+        // eslint-disable-next-line
     }, []);
-
-    const addRect = () => {
-        canvas.add(new fabric.Rect({
-            width: 100,
-            height: 100,
-        }))
-    }
 
     return (
         <Layout>
@@ -64,7 +56,6 @@ const Canvas = observer(() => {
                 <Toolbar variant={"dense"}/>
                 <div className={classes.flexBox}>
                     <div className={classes.left}>
-                        <Button onClick={addRect}>ADD</Button>
                     </div>
                     <div className={classes.canvasWrapper}>
                         <canvas id={canvasStore.canvasId}/>
