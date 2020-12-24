@@ -1,16 +1,15 @@
 import React from "react";
-import {Typography} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        display: "inline-block",
         cursor: "pointer",
         color: "#fff",
         padding: theme.spacing(0.5),
+    },
+    caption: {
+        fontSize: "0.70rem",
     }
 }));
 
@@ -19,7 +18,7 @@ const ToolButton = ({icon, text, onClick}: Props) => {
     return (
         <div className={classes.button} onClick={onClick}>
             {icon}
-            <Typography variant={"caption"}>{text}</Typography>
+            <div className={classes.caption}>{text}</div>
         </div>
     )
 }

@@ -5,13 +5,19 @@ import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 import {useFabric} from "../../hooks/useFabric";
+import {Toolbar} from "@material-ui/core";
 
 const leftMenuWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+        flexDirection: "column",
         width: "100vw",
         height: "100vh",
+    },
+    flexBox: {
+        display: "flex",
+        flex: 1,
     },
     contents: {
         display: "flex",
@@ -53,10 +59,13 @@ const Canvas = observer(() => {
         <Layout>
             <ToolBox/>
             <div className={classes.root}>
-                <div className={classes.left}>
-                </div>
-                <div className={classes.canvasWrapper}>
-                    <canvas className={classes.canvas} ref={canvasEl}/>
+                <Toolbar variant={"dense"}/>
+                <div className={classes.flexBox}>
+                    <div className={classes.left}>
+                    </div>
+                    <div className={classes.canvasWrapper}>
+                        <canvas className={classes.canvas} ref={canvasEl}/>
+                    </div>
                 </div>
             </div>
         </Layout>

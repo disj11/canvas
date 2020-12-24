@@ -11,6 +11,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: "flex-start",
     },
     center: {
+        display: "flex",
         flex: 1,
         justifyContent: "center",
     },
