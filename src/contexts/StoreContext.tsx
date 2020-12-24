@@ -1,8 +1,6 @@
 import React from "react";
 import {RootStore} from "../stores/RootStore";
 
-console.log("StoreContext");
-
 const rootStore = new RootStore();
 export const StoreContext = React.createContext<RootStore>(rootStore);
 export const StoreContextProvider = ({children}: StoreProviderProps) => {
