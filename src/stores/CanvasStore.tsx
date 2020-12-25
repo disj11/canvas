@@ -3,6 +3,7 @@ import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
 import {CanvasEvent} from "../models/canvas/CanvasEvent";
+import {BrushType} from "../models/canvas/Brush";
 
 export class CanvasStore {
     public readonly canvasId = "canvas";
@@ -12,6 +13,7 @@ export class CanvasStore {
     private _backgroundColor = "white";
     private _selectedTool: ToolTypes = ToolTypes.SELECT;
     private _selectable = false;
+    private _brushType = BrushType.PENCIL;
 
     constructor() {
         makeAutoObservable(this);
@@ -70,5 +72,13 @@ export class CanvasStore {
             obj.selectable = value;
             obj.hoverCursor = value ? "move" : "default";
         });
+    }
+
+    get brushType(): BrushType {
+        return this._brushType;
+    }
+
+    set brushType(value: BrushType) {
+        this._brushType = value;
     }
 }

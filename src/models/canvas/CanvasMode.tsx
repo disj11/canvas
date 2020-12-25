@@ -1,5 +1,6 @@
 import {ToolTypes} from "./ToolTypes";
 import {CanvasStore} from "../../stores/CanvasStore";
+import {BrushFactory} from "./Brush";
 
 abstract class CanvasMode {
     constructor(protected canvasStore: CanvasStore) {
@@ -43,7 +44,9 @@ class SelectCanvasMode extends CanvasMode {
 
 class BrushCanvasMode extends CanvasMode {
     protected setTool(): void {
-        this.canvasStore.canvas.isDrawingMode = true;
+        const canvas = this.canvasStore.canvas;
+        canvas.isDrawingMode = true;
+        canvas.freeDrawingBrush = BrushFactory.getInstance(this.canvasStore.brushType, canvas);
     }
 }
 
