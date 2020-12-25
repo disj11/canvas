@@ -119,6 +119,8 @@ class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> 
             top: e.startCursorPosition.y,
             width: 0,
             height: 0,
+            selectable: false,
+            hoverCursor: "default",
         });
         e.canvasStore.canvas.add(e.object);
     }

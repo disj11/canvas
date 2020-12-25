@@ -3,7 +3,7 @@ import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
 import {CanvasEvent} from "../models/canvas/CanvasEvent";
-import {BrushType} from "../models/canvas/Brush";
+import {BrushFactory, BrushType} from "../models/canvas/Brush";
 
 export class CanvasStore {
     public readonly canvasId = "canvas";
@@ -80,5 +80,6 @@ export class CanvasStore {
 
     set brushType(value: BrushType) {
         this._brushType = value;
+        this.canvas.freeDrawingBrush = BrushFactory.getInstance(value, this.canvas);
     }
 }

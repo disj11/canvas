@@ -1,9 +1,25 @@
 import {fabric} from "fabric";
 
-export enum BrushType {
-    CIRCLE,
-    PENCIL,
-    SPRAY,
+export class BrushType {
+    private static readonly _values: BrushType[] = [];
+    public static readonly PENCIL = new BrushType("pencil", "연필");
+    public static readonly CIRCLE = new BrushType("circle", "원형");
+    public static readonly SPRAY = new BrushType("spray", "스프레이");
+
+    constructor(
+        public readonly value: string,
+        public readonly display: string,
+    ) {
+        BrushType._values.push(this);
+    }
+
+    public static values() {
+        return this._values;
+    }
+
+    public static valueOf(value: string) {
+        return this.values().find(v => v.value === value);
+    }
 }
 
 export class BrushFactory {

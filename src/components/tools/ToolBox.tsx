@@ -50,7 +50,7 @@ const ToolBox = observer(() => {
                     />
                     <ToolButton
                         icon={<BrushIcon/>}
-                        text={"브러쉬"}
+                        text={"브러시"}
                         onClick={() => canvasStore.selectedTool = ToolTypes.BRUSH}
                         selected={canvasStore.selectedTool === ToolTypes.BRUSH}
                     />
