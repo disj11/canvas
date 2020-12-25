@@ -3,8 +3,8 @@ import {observer} from "mobx-react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useStores} from "../../hooks/useStores";
 import {ToolTypes} from "../../models/canvas/ToolTypes";
-import {Typography} from "@material-ui/core";
 import BrushPropBox from "./BrushPropBox";
+import ShapePropBox from "./ShapePropBox";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,10 +19,8 @@ const PropBox = observer(() => {
 
     return (
         <div className={classes.root}>
-            {selectedTool === ToolTypes.BRUSH && <BrushPropBox canvasStore={canvasStore}/>}
-            {selectedTool === ToolTypes.SHAPE && (<div>
-                <Typography variant={"subtitle1"}>셰이프</Typography>
-            </div>)}
+            {selectedTool === ToolTypes.BRUSH && <BrushPropBox/>}
+            {selectedTool === ToolTypes.SHAPE && (<ShapePropBox/>)}
         </div>
     )
 })

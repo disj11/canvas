@@ -3,7 +3,8 @@ import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
 import {CanvasEvent} from "../models/canvas/CanvasEvent";
-import {BrushFactory, BrushType} from "../models/canvas/Brush";
+import {BrushType} from "../models/canvas/Brush";
+import {ShapeType} from "../models/canvas/Shape";
 
 export class CanvasStore {
     public readonly canvasId = "canvas";
@@ -14,6 +15,7 @@ export class CanvasStore {
     private _selectedTool: ToolTypes = ToolTypes.SELECT;
     private _selectable = false;
     private _brushType = BrushType.PENCIL;
+    private _shapeType = ShapeType.RECT;
 
     constructor() {
         makeAutoObservable(this);
@@ -80,6 +82,14 @@ export class CanvasStore {
 
     set brushType(value: BrushType) {
         this._brushType = value;
-        this.canvas.freeDrawingBrush = BrushFactory.getInstance(value, this.canvas);
+        this.canvas.freeDrawingBrush = value.getBrush(this.canvas);
+    }
+
+    get shapeType(): ShapeType {
+        return this._shapeType;
+    }
+
+    set shapeType(value: ShapeType) {
+        this._shapeType = value;
     }
 }

@@ -104,24 +104,38 @@ class CanvasMouseMoveEventFactory {
 
 class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEvent> {
     handle(e: ShapeCanvasEvent): void {
-        e.object.set({
-            width: Math.max(MIN_OBJECT_SIZE, e.object.width || MIN_OBJECT_SIZE),
-            height: Math.max(MIN_OBJECT_SIZE, e.object.height || MIN_OBJECT_SIZE),
-        }).setCoords();
+        if (e.object.isType("rect") || e.object.isType("triangle")) {
+            e.object.set({
+                width: Math.max(MIN_OBJECT_SIZE, e.object.width || MIN_OBJECT_SIZE),
+                height: Math.max(MIN_OBJECT_SIZE, e.object.height || MIN_OBJECT_SIZE),
+            }).setCoords();
+        } else if (e.object.isType("circle")) {
+            const circle = e.object as fabric.Circle;
+            circle.set("radius", Math.max(MIN_OBJECT_SIZE, circle.radius || MIN_OBJECT_SIZE))
+                .setCoords();
+        }
         e.canvasStore.canvas.renderAll();
     }
 }
 
 class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> {
     handle(e: ShapeCanvasEvent): void {
-        e.object = new fabric.Rect({
+        e.object = e.canvasStore.shapeType.getShape({
             left: e.startCursorPosition.x,
             top: e.startCursorPosition.y,
-            width: 0,
-            height: 0,
             selectable: false,
             hoverCursor: "default",
         });
+
+        if (e.object.isType("rect") || e.object.isType("triangle")) {
+            e.object.set({
+                width: 0,
+                height: 0,
+            })
+        } else if (e.object.isType("circle")) {
+            (e.object as fabric.Circle).set("radius", 0);
+        }
+
         e.canvasStore.canvas.add(e.object);
     }
 }
@@ -136,10 +150,14 @@ class ShapeCanvasMouseMoveEvent implements CanvasEventHandler<ShapeCanvasEvent> 
             e.object.set("top", Math.abs(e.currentCursorPosition.y));
         }
 
-        e.object.set({
-            width: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x),
-            height: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y),
-        });
+        if (e.object.isType("rect") || e.object.isType("triangle")) {
+            e.object.set({
+                width: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x),
+                height: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y),
+            });
+        } else if (e.object.isType("circle")) {
+            (e.object as fabric.Circle).set("radius", Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x));
+        }
 
         e.canvasStore.canvas.renderAll();
     }

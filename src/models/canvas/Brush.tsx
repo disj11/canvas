@@ -20,11 +20,9 @@ export class BrushType {
     public static valueOf(value: string) {
         return this.values().find(v => v.value === value);
     }
-}
 
-export class BrushFactory {
-    public static getInstance(type: BrushType, canvas: fabric.Canvas) {
-        switch (type) {
+    public getBrush(canvas: fabric.Canvas) {
+        switch (this) {
             case BrushType.PENCIL:
                 return new (fabric.PencilBrush as any)(canvas);
             case BrushType.CIRCLE:
