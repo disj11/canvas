@@ -16,6 +16,8 @@ export class CanvasStore {
     private _selectable = false;
     private _brushType = BrushType.PENCIL;
     private _shapeType = ShapeType.RECT;
+    private _activeObject: fabric.Object | undefined;
+    private _activeObjects: fabric.Object[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -91,5 +93,21 @@ export class CanvasStore {
 
     set shapeType(value: ShapeType) {
         this._shapeType = value;
+    }
+
+    get activeObject(): fabric.Object | undefined {
+        return this._activeObject;
+    }
+
+    set activeObject(value: fabric.Object | undefined) {
+        this._activeObject = value;
+    }
+
+    get activeObjects(): fabric.Object[] {
+        return this._activeObjects;
+    }
+
+    set activeObjects(value: fabric.Object[]) {
+        this._activeObjects = value;
     }
 }

@@ -21,6 +21,10 @@ export class CanvasEvent {
     protected static MOUSE_UP = "mouse:up";
     protected static MOUSE_DOWN = "mouse:down";
     protected static MOUSE_MOVE = "mouse:move";
+    protected static SELECTION_CLEARED = "selection:cleared";
+    protected static SELECTION_CREATED = "selection:created";
+    protected static SELECTION_UPDATED = "selection:updated";
+
     private shareObject: CanvasEventObject = {
         e: {} as IEvent,
         canvasStore: this.canvasStore,
@@ -33,9 +37,24 @@ export class CanvasEvent {
     }
 
     public init() {
-        this.canvasStore.canvas.on(CanvasEvent.MOUSE_UP, this.handleMouseUp.bind(this));
-        this.canvasStore.canvas.on(CanvasEvent.MOUSE_MOVE, this.handleMouseMove.bind(this));
-        this.canvasStore.canvas.on(CanvasEvent.MOUSE_DOWN, this.handleMouseDown.bind(this));
+        const canvas = this.canvasStore.canvas;
+        canvas.on(CanvasEvent.MOUSE_UP, this.handleMouseUp.bind(this));
+        canvas.on(CanvasEvent.MOUSE_MOVE, this.handleMouseMove.bind(this));
+        canvas.on(CanvasEvent.MOUSE_DOWN, this.handleMouseDown.bind(this));
+        canvas.on(CanvasEvent.SELECTION_CREATED, this.handleSelectObject.bind(this));
+        canvas.on(CanvasEvent.SELECTION_UPDATED, this.handleSelectObject.bind(this));
+        canvas.on(CanvasEvent.SELECTION_CLEARED, this.handleDeSelectObject.bind(this));
+    }
+
+    private handleSelectObject() {
+        const canvas = this.canvasStore.canvas;
+        this.canvasStore.activeObject = canvas.getActiveObject();
+        this.canvasStore.activeObjects = canvas.getActiveObjects();
+    }
+
+    private handleDeSelectObject() {
+        this.canvasStore.activeObject = undefined;
+        this.canvasStore.activeObjects = [];
     }
 
     private handleMouseUp(e: IEvent) {
@@ -123,6 +142,10 @@ class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> 
         e.object = e.canvasStore.shapeType.getShape({
             left: e.startCursorPosition.x,
             top: e.startCursorPosition.y,
+            hasBorder: true,
+            stroke: "#000",
+            strokeWidth: 3,
+            fill:"transparent",
             selectable: false,
             hoverCursor: "default",
         });
