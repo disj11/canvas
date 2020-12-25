@@ -2,6 +2,7 @@ import {makeAutoObservable} from "mobx";
 import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
+import {CanvasEvent} from "../models/canvas/CanvasEvent";
 
 export class CanvasStore {
     public readonly canvasId = "canvas";
@@ -18,11 +19,8 @@ export class CanvasStore {
 
     public initCanvas(el: HTMLCanvasElement, options?: fabric.ICanvasOptions) {
         this._canvas = new fabric.Canvas(el, options);
-        this.initCanvasEvent();
-    }
-
-    private initCanvasEvent() {
         this.selectedTool = this._selectedTool;
+        new CanvasEvent(this).init();
     }
 
     get canvas() {
@@ -72,7 +70,5 @@ export class CanvasStore {
             obj.selectable = value;
             obj.hoverCursor = value ? "move" : "default";
         });
-
-        console.log(this.canvas.getObjects());
     }
 }
