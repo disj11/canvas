@@ -8,6 +8,7 @@ import MouseIcon from '@material-ui/icons/Mouse';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BrushIcon from "@material-ui/icons/Brush";
 import {ToolTypes} from "../../models/canvas/ToolTypes";
+import MenuToolButton from "./MenuToolButton";
 
 const useStyles = makeStyles(() => ({
     appBarColor: {
@@ -40,6 +41,7 @@ const ToolBox = observer(() => {
         >
             <Toolbar variant={"dense"}>
                 <div className={classes.left}>
+                    <MenuToolButton/>
                 </div>
                 <div className={classes.center}>
                     <ToolButton

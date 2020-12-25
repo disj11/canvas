@@ -1,11 +1,18 @@
-export class FileUtils {
-    public static write(fileName: string, text: string): void {
-        const blob = new Blob([text], { type: 'text/plain' });
-        const objectURL = window.URL.createObjectURL(blob);
+enum MimeType {
+    TEXT = "text/plain",
+}
 
+export class FileUtils {
+    public static writeText(fileName: string, text: string) {
+        const blob = new Blob([text], { type: MimeType.TEXT });
+        const objectURL = window.URL.createObjectURL(blob);
+        this.write(fileName, objectURL);
+    }
+
+    public static write(fileName: string, dataURL: string) {
         const a = document.createElement('a');
         a.download = fileName;
-        a.href = objectURL;
+        a.href = dataURL;
         a.click();
     }
 

@@ -36,7 +36,7 @@ const ToolButton = ({icon, text, onClick, selected}: Props) => {
 interface Props {
     icon: any;
     text: string;
-    onClick: (e: React.MouseEvent) => void;
+    onClick: (event: React.MouseEvent<HTMLElement>) => void;
     selected?: boolean;
 }
 
