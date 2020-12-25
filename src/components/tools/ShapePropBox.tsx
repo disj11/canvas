@@ -21,7 +21,7 @@ const ShapePropBox = observer(() => {
     const {canvasStore} = useStores();
 
     const handleShapeChange = (e: any) => {
-        canvasStore.shapeType = ShapeType.valueOf(e.target.value) || ShapeType.CIRCLE;
+        canvasStore.shapeType = ShapeType.valueOf(e.target.value) || ShapeType.ELLIPSE;
     }
 
     return (

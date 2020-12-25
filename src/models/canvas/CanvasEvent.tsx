@@ -2,6 +2,7 @@ import {CanvasStore} from "../../stores/CanvasStore";
 import {ToolTypes} from "./ToolTypes";
 import {IEvent} from "fabric/fabric-impl";
 import {fabric} from "fabric";
+import {ShapeType} from "./Shape";
 
 const MIN_OBJECT_SIZE = 10;
 
@@ -123,15 +124,17 @@ class CanvasMouseMoveEventFactory {
 
 class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEvent> {
     handle(e: ShapeCanvasEvent): void {
-        if (e.object.isType("rect") || e.object.isType("triangle")) {
+        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
             e.object.set({
                 width: Math.max(MIN_OBJECT_SIZE, e.object.width || MIN_OBJECT_SIZE),
                 height: Math.max(MIN_OBJECT_SIZE, e.object.height || MIN_OBJECT_SIZE),
             }).setCoords();
-        } else if (e.object.isType("circle")) {
-            const circle = e.object as fabric.Circle;
-            circle.set("radius", Math.max(MIN_OBJECT_SIZE, circle.radius || MIN_OBJECT_SIZE))
-                .setCoords();
+        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
+            const circle = e.object as fabric.Ellipse;
+            circle.set({
+                rx: Math.max(MIN_OBJECT_SIZE / 2, circle.rx || MIN_OBJECT_SIZE / 2),
+                ry: Math.max(MIN_OBJECT_SIZE / 2, circle.ry || MIN_OBJECT_SIZE / 2),
+            }).setCoords();
         }
         e.canvasStore.canvas.renderAll();
     }
@@ -150,13 +153,16 @@ class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> 
             hoverCursor: "default",
         });
 
-        if (e.object.isType("rect") || e.object.isType("triangle")) {
+        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
             e.object.set({
                 width: 0,
                 height: 0,
             })
-        } else if (e.object.isType("circle")) {
-            (e.object as fabric.Circle).set("radius", 0);
+        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
+            (e.object as fabric.Ellipse).set({
+                rx: 0,
+                ry: 0,
+            })
         }
 
         e.canvasStore.canvas.add(e.object);
@@ -173,13 +179,16 @@ class ShapeCanvasMouseMoveEvent implements CanvasEventHandler<ShapeCanvasEvent> 
             e.object.set("top", Math.abs(e.currentCursorPosition.y));
         }
 
-        if (e.object.isType("rect") || e.object.isType("triangle")) {
+        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
             e.object.set({
                 width: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x),
                 height: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y),
             });
-        } else if (e.object.isType("circle")) {
-            (e.object as fabric.Circle).set("radius", Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x));
+        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
+            (e.object as fabric.Ellipse).set({
+                rx: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x) / 2,
+                ry: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y) / 2,
+            })
         }
 
         e.canvasStore.canvas.renderAll();

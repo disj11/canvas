@@ -3,7 +3,7 @@ import {fabric} from "fabric";
 export class ShapeType {
     private static readonly _values: ShapeType[] = [];
     public static readonly RECT = new ShapeType("rect", "사각형");
-    public static readonly CIRCLE = new ShapeType("circle", "원");
+    public static readonly ELLIPSE = new ShapeType("ellipse", "원");
     public static readonly TRIANGLE = new ShapeType("triangle", "삼각형");
 
     constructor(
@@ -25,8 +25,8 @@ export class ShapeType {
         switch (this) {
             case ShapeType.RECT:
                 return new fabric.Rect(options);
-            case ShapeType.CIRCLE:
-                return new fabric.Circle(options);
+            case ShapeType.ELLIPSE:
+                return new fabric.Ellipse(options);
             case ShapeType.TRIANGLE:
                 return new fabric.Triangle(options);
             default:
