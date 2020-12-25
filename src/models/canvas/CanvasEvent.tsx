@@ -107,7 +107,7 @@ class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEvent> {
         e.object.set({
             width: Math.max(MIN_OBJECT_SIZE, e.object.width || MIN_OBJECT_SIZE),
             height: Math.max(MIN_OBJECT_SIZE, e.object.height || MIN_OBJECT_SIZE),
-        })
+        }).setCoords();
         e.canvasStore.canvas.renderAll();
     }
 }

@@ -10,6 +10,7 @@ abstract class CanvasMode {
     private resetCanvas() {
         this.canvasStore.canvas.isDrawingMode = false;
         this.canvasStore.selectable = false;
+        this.canvasStore.canvas.defaultCursor = "default";
         this.canvasStore.canvas.discardActiveObject().renderAll();
     }
 
@@ -48,5 +49,6 @@ class BrushCanvasMode extends CanvasMode {
 
 class ShapeCanvasMode extends CanvasMode {
     protected setTool(): void {
+        this.canvasStore.canvas.defaultCursor = "crosshair";
     }
 }
