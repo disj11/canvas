@@ -1,5 +1,9 @@
 = Drawing app
 
+== Demo
+
+https://disj11.github.io/canvas/
+
 == Dev
 
 === Build and tag the Docker image
