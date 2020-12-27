@@ -3,4 +3,5 @@ export enum ToolTypes {
     BRUSH,
     SHAPE,
     TEXT,
+    CANVAS,
 }

@@ -10,6 +10,7 @@ import BrushIcon from "@material-ui/icons/Brush";
 import {ToolTypes} from "../../models/canvas/ToolTypes";
 import MenuToolButton from "./MenuToolButton";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
+import PhotoSizeSelectSmallIcon from "@material-ui/icons/PhotoSizeSelectSmall";
 
 const useStyles = makeStyles(() => ({
     appBarColor: {
@@ -68,6 +69,12 @@ const ToolBox = observer(() => {
                         text={"텍스트"}
                         onClick={() => canvasStore.selectedTool = ToolTypes.TEXT}
                         selected={canvasStore.selectedTool === ToolTypes.TEXT}
+                    />
+                    <ToolButton
+                        icon={<PhotoSizeSelectSmallIcon/>}
+                        text={"캔버스"}
+                        onClick={() => canvasStore.selectedTool = ToolTypes.CANVAS}
+                        selected={canvasStore.selectedTool === ToolTypes.CANVAS}
                     />
                 </div>
                 <div className={classes.right}>
