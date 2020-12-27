@@ -1,22 +1,9 @@
-import {CanvasStore} from "../../stores/CanvasStore";
-import {ToolTypes} from "./ToolTypes";
-import {IEvent} from "fabric/fabric-impl";
-import {fabric} from "fabric";
-import {ShapeType} from "./Shape";
-
-const MIN_OBJECT_SIZE = 10;
-
-interface CanvasEventObject {
-    e: IEvent,
-    canvasStore: CanvasStore,
-    startCursorPosition: {x: number, y: number}
-    currentCursorPosition: {x: number, y: number}
-    isDown: boolean,
-}
-
-interface ShapeCanvasEvent extends CanvasEventObject {
-    object: fabric.Object,
-}
+import { CanvasStore } from "../../stores/CanvasStore";
+import { ToolTypes } from "./ToolTypes";
+import { IEvent } from "fabric/fabric-impl";
+import { CanvasEventHandler, CanvasEventObject } from "./CanvasEventModel";
+import { ShapeCanvasMouseDownEvent, ShapeCanvasMouseMoveEvent, ShapeCanvasMouseUpEvent } from "./ShapeCanvasEvent";
+import { TextCanvasMouseDownEvent, TextCanvasMouseMoveEvent, TextCanvasMouseUpEvent } from "./TextCanvasEvent";
 
 export class CanvasEvent {
     protected static MOUSE_UP = "mouse:up";
@@ -29,8 +16,8 @@ export class CanvasEvent {
     private shareObject: CanvasEventObject = {
         e: {} as IEvent,
         canvasStore: this.canvasStore,
-        startCursorPosition: {x: 0, y: 0},
-        currentCursorPosition: {x: 0, y: 0},
+        startCursorPosition: { x: 0, y: 0 },
+        currentCursorPosition: { x: 0, y: 0 },
         isDown: false
     };
 
@@ -67,14 +54,14 @@ export class CanvasEvent {
     private handleMouseDown(e: IEvent) {
         this.shareObject.e = e;
         this.shareObject.isDown = true;
-        this.shareObject.startCursorPosition = {...this.getCursorPosition(e)};
-        this.shareObject.currentCursorPosition = {...this.getCursorPosition(e)};
+        this.shareObject.startCursorPosition = { ...this.getCursorPosition(e) };
+        this.shareObject.currentCursorPosition = { ...this.getCursorPosition(e) };
         CanvasMouseDownEventFactory.getInstance(this.canvasStore)?.handle(this.shareObject);
     };
 
     private handleMouseMove(e: IEvent) {
         this.shareObject.e = e;
-        this.shareObject.currentCursorPosition = {...this.getCursorPosition(e)};
+        this.shareObject.currentCursorPosition = { ...this.getCursorPosition(e) };
         if (this.shareObject.isDown) {
             CanvasMouseMoveEventFactory.getInstance(this.canvasStore)?.handle(this.shareObject);
         }
@@ -85,15 +72,13 @@ export class CanvasEvent {
     }
 }
 
-interface CanvasEventHandler<T extends CanvasEventObject> {
-    handle(e: T): void;
-}
-
 class CanvasMouseUpEventFactory {
     public static getInstance(canvasStore: CanvasStore): CanvasEventHandler<CanvasEventObject> | null {
         switch (canvasStore.selectedTool) {
             case ToolTypes.SHAPE:
                 return new ShapeCanvasMouseUpEvent();
+            case ToolTypes.TEXT:
+                return new TextCanvasMouseUpEvent();
             default:
                 return null;
         }
@@ -105,6 +90,8 @@ class CanvasMouseDownEventFactory {
         switch (canvasStore.selectedTool) {
             case ToolTypes.SHAPE:
                 return new ShapeCanvasMouseDownEvent();
+            case ToolTypes.TEXT:
+                return new TextCanvasMouseDownEvent();
             default:
                 return null;
         }
@@ -116,82 +103,12 @@ class CanvasMouseMoveEventFactory {
         switch (canvasStore.selectedTool) {
             case ToolTypes.SHAPE:
                 return new ShapeCanvasMouseMoveEvent();
+            case ToolTypes.TEXT:
+                return new TextCanvasMouseMoveEvent();
             default:
                 return null;
         }
     }
 }
 
-class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEvent> {
-    handle(e: ShapeCanvasEvent): void {
-        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
-            e.object.set({
-                width: Math.max(MIN_OBJECT_SIZE, e.object.width || MIN_OBJECT_SIZE),
-                height: Math.max(MIN_OBJECT_SIZE, e.object.height || MIN_OBJECT_SIZE),
-            }).setCoords();
-        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
-            const circle = e.object as fabric.Ellipse;
-            circle.set({
-                rx: Math.max(MIN_OBJECT_SIZE / 2, circle.rx || MIN_OBJECT_SIZE / 2),
-                ry: Math.max(MIN_OBJECT_SIZE / 2, circle.ry || MIN_OBJECT_SIZE / 2),
-            }).setCoords();
-        }
-        e.canvasStore.canvas.renderAll();
-    }
-}
-
-class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> {
-    handle(e: ShapeCanvasEvent): void {
-        e.object = e.canvasStore.shapeType.getShape({
-            left: e.startCursorPosition.x,
-            top: e.startCursorPosition.y,
-            hasBorder: true,
-            stroke: "#000",
-            strokeWidth: 3,
-            fill:"transparent",
-            selectable: false,
-            hoverCursor: "default",
-        });
-
-        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
-            e.object.set({
-                width: 0,
-                height: 0,
-            })
-        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
-            (e.object as fabric.Ellipse).set({
-                rx: 0,
-                ry: 0,
-            })
-        }
-
-        e.canvasStore.canvas.add(e.object);
-    }
-}
-
-class ShapeCanvasMouseMoveEvent implements CanvasEventHandler<ShapeCanvasEvent> {
-    handle(e: ShapeCanvasEvent): void {
-        if(e.currentCursorPosition.x < e.startCursorPosition.x){
-            e.object.set("left", Math.abs(e.currentCursorPosition.x));
-        }
-
-        if(e.currentCursorPosition.y < e.startCursorPosition.y){
-            e.object.set("top", Math.abs(e.currentCursorPosition.y));
-        }
-
-        if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
-            e.object.set({
-                width: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x),
-                height: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y),
-            });
-        } else if (e.object.isType(ShapeType.ELLIPSE.value)) {
-            (e.object as fabric.Ellipse).set({
-                rx: Math.abs(e.startCursorPosition.x - e.currentCursorPosition.x) / 2,
-                ry: Math.abs(e.startCursorPosition.y - e.currentCursorPosition.y) / 2,
-            })
-        }
-
-        e.canvasStore.canvas.renderAll();
-    }
-}
 
