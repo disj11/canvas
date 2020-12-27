@@ -9,6 +9,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import BrushIcon from "@material-ui/icons/Brush";
 import {ToolTypes} from "../../models/canvas/ToolTypes";
 import MenuToolButton from "./MenuToolButton";
+import TextFieldsIcon from "@material-ui/icons/TextFields";
 
 const useStyles = makeStyles(() => ({
     appBarColor: {
@@ -61,6 +62,12 @@ const ToolBox = observer(() => {
                         text={"셰이프"}
                         onClick={() => canvasStore.selectedTool = ToolTypes.SHAPE}
                         selected={canvasStore.selectedTool === ToolTypes.SHAPE}
+                    />
+                    <ToolButton
+                        icon={<TextFieldsIcon/>}
+                        text={"텍스트"}
+                        onClick={() => canvasStore.selectedTool = ToolTypes.TEXT}
+                        selected={canvasStore.selectedTool === ToolTypes.TEXT}
                     />
                 </div>
                 <div className={classes.right}>
