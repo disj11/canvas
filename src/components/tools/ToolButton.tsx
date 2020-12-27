@@ -1,6 +1,7 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import clsx from "clsx";
+import {CommonColor} from "../../models/color/CommonColor";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "0.70rem",
     },
     selected: {
-        background: "linear-gradient(90deg, rgba(172,118,255,1) 0%, rgba(91,91,255,1) 100%)",
+        background: CommonColor.BACKGROUND_GRADIENT,
     }
 }));
 
