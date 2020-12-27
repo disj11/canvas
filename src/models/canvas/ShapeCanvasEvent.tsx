@@ -1,5 +1,7 @@
-import { CanvasEventHandler, CanvasEventObject } from "./CanvasEventModel";
-import { ShapeType } from "./Shape";
+import {CanvasEventHandler, CanvasEventObject} from "./CanvasEventModel";
+import {ShapeType} from "./Shape";
+import {ToolTypes} from "./ToolTypes";
+import {fabric} from "fabric";
 
 const MIN_OBJECT_SIZE = 10;
 
@@ -21,6 +23,9 @@ export class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEv
                 ry: Math.max(MIN_OBJECT_SIZE / 2, circle.ry || MIN_OBJECT_SIZE / 2),
             }).setCoords();
         }
+
+        e.canvasStore.selectedTool = ToolTypes.SELECT;
+        e.canvasStore.canvas.setActiveObject(e.object);
         e.canvasStore.canvas.renderAll();
     }
 }
@@ -33,7 +38,7 @@ export class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvas
             hasBorder: true,
             stroke: "#000",
             strokeWidth: 3,
-            fill:"transparent",
+            fill: "transparent",
             selectable: false,
             hoverCursor: "default",
         });
@@ -56,13 +61,16 @@ export class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvas
 
 export class ShapeCanvasMouseMoveEvent implements CanvasEventHandler<ShapeCanvasEvent> {
     handle(e: ShapeCanvasEvent): void {
-        if(e.currentCursorPosition.x < e.startCursorPosition.x){
+        if (e.currentCursorPosition.x < e.startCursorPosition.x) {
             e.object.set("left", Math.abs(e.currentCursorPosition.x));
         }
 
-        if(e.currentCursorPosition.y < e.startCursorPosition.y){
+        if (e.currentCursorPosition.y < e.startCursorPosition.y) {
             e.object.set("top", Math.abs(e.currentCursorPosition.y));
         }
+
+        e.object.set("flipX", e.currentCursorPosition.x < e.startCursorPosition.x);
+        e.object.set("flipY", e.currentCursorPosition.y < e.startCursorPosition.y);
 
         if (e.object.isType(ShapeType.RECT.value) || e.object.isType(ShapeType.TRIANGLE.value)) {
             e.object.set({

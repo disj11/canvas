@@ -29,6 +29,8 @@ export class CanvasModeFactory {
                 return new BrushCanvasMode(canvasStore);
             case ToolTypes.SHAPE:
                 return new ShapeCanvasMode(canvasStore);
+            case ToolTypes.TEXT:
+                return new TextCanvasMode(canvasStore);
             default:
                 return new DefaultCanvasMode(canvasStore);
         }
@@ -50,6 +52,12 @@ class BrushCanvasMode extends CanvasMode {
 class ShapeCanvasMode extends CanvasMode {
     protected setTool(): void {
         this.canvasStore.canvas.defaultCursor = "crosshair";
+    }
+}
+
+class TextCanvasMode extends CanvasMode {
+    protected setTool(): void {
+        this.canvasStore.canvas.defaultCursor = "text";
     }
 }
 
