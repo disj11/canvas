@@ -12,7 +12,11 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(3),
     },
     button: {
+        borderRadius: "4px",
+        cursor: "pointer",
+        padding: theme.spacing(1),
         marginRight: theme.spacing(0.5),
+        height: 40,
         "&:hover": {
             background: CommonColor.BACKGROUND_GRADIENT_HOVER,
             "& svg > *": {
@@ -46,30 +50,30 @@ const ShapePropBox = observer(() => {
                     <Typography variant={"caption"}>모양</Typography>
                 </Box>
                 <Box display={"flex"}>
-                    <Button
+                    <div
                         className={clsx(classes.button, canvasStore.shapeType === ShapeType.ELLIPSE && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.ELLIPSE)}
                     >
-                        <svg height="40" width="40">
-                            <circle cx="20" cy="20" r="18" stroke="black" fill="transparent" strokeWidth={3}/>
+                        <svg height="24" width="24">
+                            <circle cx="12" cy="12" r="10" stroke="black" fill="transparent" strokeWidth={2}/>
                         </svg>
-                    </Button>
-                    <Button
+                    </div>
+                    <div
                         className={clsx(classes.button, canvasStore.shapeType === ShapeType.RECT && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.RECT)}
                     >
-                        <svg width="40" height="40">
-                            <rect width="40" height="40" stroke="black" fill="transparent" strokeWidth={5}/>
+                        <svg width="24" height="24">
+                            <rect width="24" height="24" stroke="black" fill="transparent" strokeWidth={4}/>
                         </svg>
-                    </Button>
-                    <Button
+                    </div>
+                    <div
                         className={clsx(classes.button, canvasStore.shapeType === ShapeType.TRIANGLE && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.TRIANGLE)}
                     >
-                        <svg width="40" height="40">
-                            <polygon points="20,2 38,38 2,38" stroke="black" fill="transparent" strokeWidth={3}/>
+                        <svg width="24" height="24">
+                            <polygon points="12,2 22,22 2,22" stroke="black" fill="transparent" strokeWidth={2}/>
                         </svg>
-                    </Button>
+                    </div>
                 </Box>
             </div>
         </div>
