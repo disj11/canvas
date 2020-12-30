@@ -1,6 +1,7 @@
-import { makeStyles } from "@material-ui/core";
+import {Popover} from "@material-ui/core";
 import React from "react";
-import { TwitterPicker } from "react-color"
+import {TwitterPicker, ChromePicker} from "react-color"
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface Props {
     color: string,
@@ -16,15 +17,34 @@ const useStyles = makeStyles((theme) => ({
         borderColor: "#c0c0c0",
         marginBottom: theme.spacing(2),
         backgroundColor: (props: Props) => props.color,
+        cursor: "pointer",
     }
 }));
 
 const ColorSelect = (props: Props) => {
     const classes = useStyles(props);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const open = !!anchorEl;
+
+    const handleClick = (e: any) => {
+        setAnchorEl(e.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <div>
-            <div className={classes.colorBox}/>
+            <div className={classes.colorBox} onClick={handleClick}/>
             <TwitterPicker color={props.color} onChangeComplete={(e) => props.onChange(e.hex)}/>
+            <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+            >
+                <ChromePicker color={props.color} disableAlpha={true} onChangeComplete={(e) => props.onChange(e.hex)}/>
+            </Popover>
         </div>
     )
 }
