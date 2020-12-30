@@ -95,7 +95,7 @@ const BrushPropBox = observer(() => {
                     </div>
                 </div>
                 <div>
-                    <Box p={1}><Divider/></Box>
+                    <Box paddingTop={3} paddingBottom={3}><Divider/></Box>
                     <ColorSelect color={canvasStore.color} onChange={(value) => canvasStore.color = value} />
                 </div>
             </div>

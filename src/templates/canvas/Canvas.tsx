@@ -6,7 +6,7 @@ import {observer} from "mobx-react";
 import {Toolbar} from "@material-ui/core";
 import {useStores} from "../../hooks/useStores";
 
-const leftMenuWidth = 240;
+const leftMenuWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",

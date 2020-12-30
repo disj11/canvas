@@ -37,7 +37,7 @@ const ColorSelect = (props: Props) => {
     return (
         <div>
             <div className={classes.colorBox} onClick={handleClick}/>
-            <TwitterPicker color={props.color} onChangeComplete={(e) => props.onChange(e.hex)}/>
+            <TwitterPicker width={"100%"} color={props.color} onChangeComplete={(e) => props.onChange(e.hex)}/>
             <Popover
                 open={open}
                 anchorEl={anchorEl}
