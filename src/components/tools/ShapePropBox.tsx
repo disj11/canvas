@@ -34,10 +34,10 @@ const useStyles = makeStyles(theme => ({
 
 const ShapePropBox = observer(() => {
     const classes = useStyles();
-    const {canvasStore} = useStores();
+    const {shapeStore} = useStores();
 
     const handleShapeChange = (type: ShapeType) => {
-        canvasStore.shapeType = type || ShapeType.ELLIPSE;
+        shapeStore.setShapeType(type);
     }
 
     return (
@@ -51,7 +51,7 @@ const ShapePropBox = observer(() => {
                 </Box>
                 <Box display={"flex"}>
                     <div
-                        className={clsx(classes.button, canvasStore.shapeType === ShapeType.ELLIPSE && classes.selected)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.ELLIPSE && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.ELLIPSE)}
                     >
                         <svg height="24" width="24">
@@ -59,7 +59,7 @@ const ShapePropBox = observer(() => {
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button, canvasStore.shapeType === ShapeType.RECT && classes.selected)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.RECT && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.RECT)}
                     >
                         <svg width="24" height="24">
@@ -67,7 +67,7 @@ const ShapePropBox = observer(() => {
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button, canvasStore.shapeType === ShapeType.TRIANGLE && classes.selected)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.TRIANGLE && classes.selected)}
                         onClick={() => handleShapeChange(ShapeType.TRIANGLE)}
                     >
                         <svg width="24" height="24">

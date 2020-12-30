@@ -14,9 +14,10 @@ export class TextCanvasMouseUpEvent implements CanvasEventHandler<TextCanvasEven
             fontSize: 24,
         });
 
-        e.canvasStore.canvas.add(e.object);
-        e.canvasStore.selectedTool = ToolTypes.SELECT;
-        e.canvasStore.canvas.setActiveObject(e.object);
+        const canvasStore = e.rootStore.canvasStore;
+        canvasStore.canvas.add(e.object);
+        canvasStore.selectedTool = ToolTypes.SELECT;
+        canvasStore.canvas.setActiveObject(e.object);
 
         e.object.selectAll();
         e.object.enterEditing();

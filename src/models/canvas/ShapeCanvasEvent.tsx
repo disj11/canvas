@@ -24,15 +24,16 @@ export class ShapeCanvasMouseUpEvent implements CanvasEventHandler<ShapeCanvasEv
             }).setCoords();
         }
 
-        e.canvasStore.selectedTool = ToolTypes.SELECT;
-        e.canvasStore.canvas.setActiveObject(e.object);
-        e.canvasStore.canvas.renderAll();
+        const canvasStore = e.rootStore.canvasStore;
+        canvasStore.selectedTool = ToolTypes.SELECT;
+        canvasStore.canvas.setActiveObject(e.object);
+        canvasStore.canvas.renderAll();
     }
 }
 
 export class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvasEvent> {
     handle(e: ShapeCanvasEvent): void {
-        e.object = e.canvasStore.shapeType.getShape({
+        e.object = e.rootStore.shapeStore.shapeType.getShape({
             left: e.startCursorPosition.x,
             top: e.startCursorPosition.y,
             hasBorder: true,
@@ -55,7 +56,7 @@ export class ShapeCanvasMouseDownEvent implements CanvasEventHandler<ShapeCanvas
             })
         }
 
-        e.canvasStore.canvas.add(e.object);
+        e.rootStore.canvasStore.canvas.add(e.object);
     }
 }
 
@@ -84,6 +85,6 @@ export class ShapeCanvasMouseMoveEvent implements CanvasEventHandler<ShapeCanvas
             })
         }
 
-        e.canvasStore.canvas.renderAll();
+        e.rootStore.canvasStore.canvas.renderAll();
     }
 }

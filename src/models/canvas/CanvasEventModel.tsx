@@ -1,9 +1,9 @@
 import { IEvent } from "fabric/fabric-impl";
-import { CanvasStore } from "stores/CanvasStore";
+import { RootStore } from "stores/RootStore";
 
 export interface CanvasEventObject {
     e: IEvent,
-    canvasStore: CanvasStore,
+    rootStore: RootStore,
     startCursorPosition: {x: number, y: number}
     currentCursorPosition: {x: number, y: number}
     isDown: boolean,

@@ -4,6 +4,7 @@ import { IEvent } from "fabric/fabric-impl";
 import { CanvasEventHandler, CanvasEventObject } from "./CanvasEventModel";
 import { ShapeCanvasMouseDownEvent, ShapeCanvasMouseMoveEvent, ShapeCanvasMouseUpEvent } from "./ShapeCanvasEvent";
 import { TextCanvasMouseDownEvent, TextCanvasMouseMoveEvent, TextCanvasMouseUpEvent } from "./TextCanvasEvent";
+import { RootStore } from "stores/RootStore";
 
 export class CanvasEvent {
     protected static MOUSE_UP = "mouse:up";
@@ -15,17 +16,17 @@ export class CanvasEvent {
 
     private shareObject: CanvasEventObject = {
         e: {} as IEvent,
-        canvasStore: this.canvasStore,
+        rootStore: this.rootStore,
         startCursorPosition: { x: 0, y: 0 },
         currentCursorPosition: { x: 0, y: 0 },
         isDown: false
     };
 
-    constructor(private readonly canvasStore: CanvasStore) {
+    constructor(private readonly rootStore: RootStore) {
     }
 
     public init() {
-        const canvas = this.canvasStore.canvas;
+        const canvas = this.rootStore.canvasStore.canvas;
         canvas.on(CanvasEvent.MOUSE_UP, this.handleMouseUp.bind(this));
         canvas.on(CanvasEvent.MOUSE_MOVE, this.handleMouseMove.bind(this));
         canvas.on(CanvasEvent.MOUSE_DOWN, this.handleMouseDown.bind(this));
@@ -35,20 +36,20 @@ export class CanvasEvent {
     }
 
     private handleSelectObject() {
-        const canvas = this.canvasStore.canvas;
-        this.canvasStore.activeObject = canvas.getActiveObject();
-        this.canvasStore.activeObjects = canvas.getActiveObjects();
+        const canvas = this.rootStore.canvasStore.canvas;
+        this.rootStore.canvasStore.activeObject = canvas.getActiveObject();
+        this.rootStore.canvasStore.activeObjects = canvas.getActiveObjects();
     }
 
     private handleDeSelectObject() {
-        this.canvasStore.activeObject = undefined;
-        this.canvasStore.activeObjects = [];
+        this.rootStore.canvasStore.activeObject = undefined;
+        this.rootStore.canvasStore.activeObjects = [];
     }
 
     private handleMouseUp(e: IEvent) {
         this.shareObject.e = e;
         this.shareObject.isDown = false;
-        CanvasMouseUpEventFactory.getInstance(this.canvasStore)?.handle(this.shareObject);
+        CanvasMouseUpEventFactory.getInstance(this.rootStore.canvasStore)?.handle(this.shareObject);
     }
 
     private handleMouseDown(e: IEvent) {
@@ -56,19 +57,19 @@ export class CanvasEvent {
         this.shareObject.isDown = true;
         this.shareObject.startCursorPosition = { ...this.getCursorPosition(e) };
         this.shareObject.currentCursorPosition = { ...this.getCursorPosition(e) };
-        CanvasMouseDownEventFactory.getInstance(this.canvasStore)?.handle(this.shareObject);
+        CanvasMouseDownEventFactory.getInstance(this.rootStore.canvasStore)?.handle(this.shareObject);
     };
 
     private handleMouseMove(e: IEvent) {
         this.shareObject.e = e;
         this.shareObject.currentCursorPosition = { ...this.getCursorPosition(e) };
         if (this.shareObject.isDown) {
-            CanvasMouseMoveEventFactory.getInstance(this.canvasStore)?.handle(this.shareObject);
+            CanvasMouseMoveEventFactory.getInstance(this.rootStore.canvasStore)?.handle(this.shareObject);
         }
     };
 
     private getCursorPosition(e: IEvent) {
-        return this.canvasStore.canvas.getPointer(e.e);
+        return this.rootStore.canvasStore.canvas.getPointer(e.e);
     }
 }
 

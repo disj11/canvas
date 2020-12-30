@@ -3,7 +3,7 @@ import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
 import {CanvasEvent} from "../models/canvas/CanvasEvent";
-import {ShapeType} from "../models/canvas/Shape";
+import { RootStore } from "./RootStore";
 
 export class CanvasStore {
     public readonly canvasId = "canvas";
@@ -13,18 +13,17 @@ export class CanvasStore {
     private _backgroundColor = "white";
     private _selectedTool: ToolTypes = ToolTypes.SELECT;
     private _selectable = false;
-    private _shapeType = ShapeType.RECT;
     private _activeObject: fabric.Object | undefined;
     private _activeObjects: fabric.Object[] = [];
 
-    constructor() {
+    constructor(private readonly rootStore: RootStore) {
         makeAutoObservable(this);
     }
 
     public initCanvas(el: HTMLCanvasElement, options?: fabric.ICanvasOptions) {
         this._canvas = new fabric.Canvas(el, options);
         this.selectedTool = this._selectedTool;
-        new CanvasEvent(this).init();
+        new CanvasEvent(this.rootStore).init();
     }
 
     get canvas() {
@@ -74,14 +73,6 @@ export class CanvasStore {
             obj.selectable = value;
             obj.hoverCursor = value ? "move" : "default";
         });
-    }
-
-    get shapeType(): ShapeType {
-        return this._shapeType;
-    }
-
-    set shapeType(value: ShapeType) {
-        this._shapeType = value;
     }
 
     get activeObject(): fabric.Object | undefined {
