@@ -3,7 +3,6 @@ import {fabric} from "fabric";
 import {ToolTypes} from "../models/canvas/ToolTypes";
 import {CanvasModeFactory} from "../models/canvas/CanvasMode";
 import {CanvasEvent} from "../models/canvas/CanvasEvent";
-import {BrushType} from "../models/canvas/Brush";
 import {ShapeType} from "../models/canvas/Shape";
 
 export class CanvasStore {
@@ -14,10 +13,7 @@ export class CanvasStore {
     private _backgroundColor = "white";
     private _selectedTool: ToolTypes = ToolTypes.SELECT;
     private _selectable = false;
-    private _brushType = BrushType.PENCIL;
     private _shapeType = ShapeType.RECT;
-    private _thickness = 1;
-    private _color = "#000000";
     private _activeObject: fabric.Object | undefined;
     private _activeObjects: fabric.Object[] = [];
 
@@ -80,17 +76,6 @@ export class CanvasStore {
         });
     }
 
-    get brushType(): BrushType {
-        return this._brushType;
-    }
-
-    set brushType(value: BrushType) {
-        this._brushType = value;
-        this.canvas.freeDrawingBrush = value.getBrush(this.canvas);
-        this.canvas.freeDrawingBrush.width = this._thickness;
-        this.canvas.freeDrawingBrush.color = this._color;
-    }
-
     get shapeType(): ShapeType {
         return this._shapeType;
     }
@@ -113,23 +98,5 @@ export class CanvasStore {
 
     set activeObjects(value: fabric.Object[]) {
         this._activeObjects = value;
-    }
-
-    get thickness(): number {
-        return this._thickness;
-    }
-
-    set thickness(value: number) {
-        this._thickness = value;
-        this.canvas.freeDrawingBrush.width = value;
-    }
-
-    get color() {
-        return this._color;
-    }
-
-    set color(value: string) {
-        this._color = value;
-        this.canvas.freeDrawingBrush.color = value;
     }
 }

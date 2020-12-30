@@ -52,10 +52,18 @@ const useStyles = makeStyles(theme => ({
 
 const BrushPropBox = observer(() => {
     const classes = useStyles();
-    const { canvasStore } = useStores();
+    const { brushStore } = useStores();
 
-    const handleBrushChange = (type: BrushType) => {
-        canvasStore.brushType = type || BrushType.PENCIL;
+    const handleBrushChange = (value: BrushType) => {
+        brushStore.setBrushType(value);
+    }
+
+    const handleLineWidthChange = (value: number) => {
+        brushStore.setLineWidth(value);
+    }
+
+    const handleColorChange = (value: string) => {
+        brushStore.setColor(value);
     }
 
     return (
@@ -71,19 +79,19 @@ const BrushPropBox = observer(() => {
                         </Box>
                         <Box display="flex">
                             <div
-                                className={clsx(classes.button, canvasStore.brushType === BrushType.PENCIL && classes.selected)}
+                                className={clsx(classes.button, brushStore.brushType === BrushType.PENCIL && classes.selected)}
                                 onClick={() => handleBrushChange(BrushType.PENCIL)}
                             >
                                 <FontAwesomeIcon icon={faPencilAlt} size="lg" />
                             </div>
                             <div
-                                className={clsx(classes.button, canvasStore.brushType === BrushType.SPRAY && classes.selected)}
+                                className={clsx(classes.button, brushStore.brushType === BrushType.SPRAY && classes.selected)}
                                 onClick={() => handleBrushChange(BrushType.SPRAY)}
                             >
                                 <FontAwesomeIcon icon={faSprayCan} size="lg" />
                             </div>
                             <div
-                                className={clsx(classes.button, canvasStore.brushType === BrushType.CIRCLE && classes.selected)}
+                                className={clsx(classes.button, brushStore.brushType === BrushType.CIRCLE && classes.selected)}
                                 onClick={() => handleBrushChange(BrushType.CIRCLE)}
                             >
                                 <FontAwesomeIcon icon={faCircle} size="lg" />
@@ -91,12 +99,12 @@ const BrushPropBox = observer(() => {
                         </Box>
                     </div>
                     <div>
-                        <Range label="두께" value={canvasStore.thickness} onChange={(value) => canvasStore.thickness = value} prefix={"px"} />
+                        <Range label="두께" value={brushStore.lineWidth} onChange={handleLineWidthChange} prefix={"px"} />
                     </div>
                 </div>
                 <div>
                     <Box paddingTop={3} paddingBottom={3}><Divider/></Box>
-                    <ColorSelect color={canvasStore.color} onChange={(value) => canvasStore.color = value} />
+                    <ColorSelect color={brushStore.color} onChange={handleColorChange} />
                 </div>
             </div>
         </div>
