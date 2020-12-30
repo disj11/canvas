@@ -1,13 +1,14 @@
-import {Box, Button, Select, Typography} from "@material-ui/core";
-import {BrushType} from "../../models/canvas/Brush";
+import { Box, Typography } from "@material-ui/core";
+import { BrushType } from "../../models/canvas/Brush";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {observer} from "mobx-react";
-import {useStores} from "../../hooks/useStores";
+import { observer } from "mobx-react";
+import { useStores } from "../../hooks/useStores";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSprayCan, faCircle } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
+import { CommonColor } from "../../models/color/CommonColor";
+import { Range } from "components/input";
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -30,12 +31,17 @@ const useStyles = makeStyles(theme => ({
         "& *": {
             color: "white",
         }
+    },
+    propBox: {
+        "& > div": {
+            marginBottom: theme.spacing(3),
+        }
     }
 }))
 
 const BrushPropBox = observer(() => {
     const classes = useStyles();
-    const {canvasStore} = useStores();
+    const { canvasStore } = useStores();
 
     const handleBrushChange = (type: BrushType) => {
         canvasStore.brushType = type || BrushType.PENCIL;
@@ -46,30 +52,35 @@ const BrushPropBox = observer(() => {
             <div className={classes.title}>
                 <Typography variant={"h6"} color={"primary"}>브러시</Typography>
             </div>
-            <div>
-                <Box mb={1}>
-                    <Typography variant={"caption"}>모양</Typography>
-                </Box>
-                <Box display="flex">
-                    <div
-                        className={clsx(classes.button, canvasStore.brushType === BrushType.PENCIL && classes.selected)}
-                        onClick={() => handleBrushChange(BrushType.PENCIL)}
-                    >
-                        <FontAwesomeIcon icon={faPencilAlt} size="lg"/>
-                    </div>
-                    <div
-                        className={clsx(classes.button, canvasStore.brushType === BrushType.SPRAY && classes.selected)}
-                        onClick={() => handleBrushChange(BrushType.SPRAY)}
-                    >
-                        <FontAwesomeIcon icon={faSprayCan} size="lg"/>
-                    </div>
-                    <div
-                        className={clsx(classes.button, canvasStore.brushType === BrushType.CIRCLE && classes.selected)}
-                        onClick={() => handleBrushChange(BrushType.CIRCLE)}
-                    >
-                        <FontAwesomeIcon icon={faCircle} size="lg"/>
-                    </div>
-                </Box>
+            <div className={classes.propBox}>
+                <div>
+                    <Box mb={1}>
+                        <Typography variant={"caption"}>모양</Typography>
+                    </Box>
+                    <Box display="flex">
+                        <div
+                            className={clsx(classes.button, canvasStore.brushType === BrushType.PENCIL && classes.selected)}
+                            onClick={() => handleBrushChange(BrushType.PENCIL)}
+                        >
+                            <FontAwesomeIcon icon={faPencilAlt} size="lg" />
+                        </div>
+                        <div
+                            className={clsx(classes.button, canvasStore.brushType === BrushType.SPRAY && classes.selected)}
+                            onClick={() => handleBrushChange(BrushType.SPRAY)}
+                        >
+                            <FontAwesomeIcon icon={faSprayCan} size="lg" />
+                        </div>
+                        <div
+                            className={clsx(classes.button, canvasStore.brushType === BrushType.CIRCLE && classes.selected)}
+                            onClick={() => handleBrushChange(BrushType.CIRCLE)}
+                        >
+                            <FontAwesomeIcon icon={faCircle} size="lg" />
+                        </div>
+                    </Box>
+                </div>
+                <div>
+                    <Range label="두께" value={canvasStore.thickness} onChange={(value) => canvasStore.thickness = value} prefix={"px"}/>
+                </div>
             </div>
         </div>
     )

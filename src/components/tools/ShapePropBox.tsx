@@ -1,4 +1,4 @@
-import {Box, Button, Typography} from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {observer} from "mobx-react";

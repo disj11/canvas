@@ -16,6 +16,7 @@ export class CanvasStore {
     private _selectable = false;
     private _brushType = BrushType.PENCIL;
     private _shapeType = ShapeType.RECT;
+    private _thickness = 1;
     private _activeObject: fabric.Object | undefined;
     private _activeObjects: fabric.Object[] = [];
 
@@ -85,6 +86,7 @@ export class CanvasStore {
     set brushType(value: BrushType) {
         this._brushType = value;
         this.canvas.freeDrawingBrush = value.getBrush(this.canvas);
+        this.canvas.freeDrawingBrush.width = this._thickness;
     }
 
     get shapeType(): ShapeType {
@@ -109,5 +111,14 @@ export class CanvasStore {
 
     set activeObjects(value: fabric.Object[]) {
         this._activeObjects = value;
+    }
+
+    get thickness(): number {
+        return this._thickness;
+    }
+
+    set thickness(value: number) {
+        this._thickness = value;
+        this.canvas.freeDrawingBrush.width = value;
     }
 }
