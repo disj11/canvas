@@ -1,11 +1,13 @@
-import {Popover} from "@material-ui/core";
+import { Popover, Typography } from "@material-ui/core";
 import React from "react";
-import {TwitterPicker, ChromePicker} from "react-color"
+import { ChromePicker, ColorResult } from "react-color"
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface Props {
+    label?: string,
     color: string,
-    onChange: (color: string) => void;
+    disableAlpha?: boolean,
+    onChange: (color: ColorResult) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ColorSelect = (props: Props) => {
+const ColorPicker = (props: Props) => {
     const classes = useStyles(props);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const open = !!anchorEl;
@@ -36,17 +38,19 @@ const ColorSelect = (props: Props) => {
 
     return (
         <div>
-            <div className={classes.colorBox} onClick={handleClick}/>
-            <TwitterPicker width={"100%"} color={props.color} onChangeComplete={(e) => props.onChange(e.hex)}/>
-            <Popover
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-            >
-                <ChromePicker color={props.color} disableAlpha={true} onChangeComplete={(e) => props.onChange(e.hex)}/>
-            </Popover>
+            {props.label && <Typography variant={"caption"}>{props.label}</Typography>}
+            <div>
+                <div className={classes.colorBox} onClick={handleClick} />
+                <Popover
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                >
+                    <ChromePicker color={props.color} disableAlpha={props.disableAlpha} onChangeComplete={props.onChange} />
+                </Popover>
+            </div>
         </div>
     )
 }
 
-export default ColorSelect;
+export default ColorPicker;

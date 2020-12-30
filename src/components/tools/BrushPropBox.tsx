@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSprayCan, faCircle } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
 import { CommonColor } from "../../models/color/CommonColor";
-import { ColorSelect, Range } from "components/input";
+import { ColorPalette, Range } from "components/input";
+import { ColorResult } from "react-color";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -62,8 +63,8 @@ const BrushPropBox = observer(() => {
         brushStore.setLineWidth(value);
     }
 
-    const handleColorChange = (value: string) => {
-        brushStore.setColor(value);
+    const handleColorChange = (color: ColorResult) => {
+        brushStore.setColor(color.hex);
     }
 
     return (
@@ -104,7 +105,7 @@ const BrushPropBox = observer(() => {
                 </div>
                 <div>
                     <Box paddingTop={3} paddingBottom={3}><Divider/></Box>
-                    <ColorSelect color={brushStore.color} onChange={handleColorChange} />
+                    <ColorPalette color={brushStore.color} onChange={handleColorChange} disableAlpha={true} />
                 </div>
             </div>
         </div>
