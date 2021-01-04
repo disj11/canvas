@@ -21,7 +21,7 @@ export class ShapeType {
         return this.values().find(v => v.value === value);
     }
 
-    public getShape<T extends fabric.IObjectOptions>(options: T) {
+    public getShape<T extends fabric.IObjectOptions>(options?: T) {
         switch (this) {
             case ShapeType.RECT:
                 return new fabric.Rect(options);

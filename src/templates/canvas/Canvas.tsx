@@ -37,17 +37,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Canvas = observer(() => {
     const classes = useStyles();
-    const {canvasStore} = useStores();
+    const rootStore = useStores();
+    const canvasRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-        const el = document.getElementById(canvasStore.canvasId) as HTMLCanvasElement;
-        canvasStore.initCanvas(el, {
-            width: canvasStore.width,
-            height: canvasStore.height,
-            backgroundColor: canvasStore.backgroundColor,
-        });
+        if (!canvasRef.current) {
+            return;
+        }
+
+        rootStore.init(canvasRef.current);
         // eslint-disable-next-line
-    }, []);
+    }, [canvasRef]);
 
     return (
         <Layout>
@@ -58,9 +58,7 @@ const Canvas = observer(() => {
                     <div className={classes.left}>
                         <PropBox/>
                     </div>
-                    <div className={classes.canvasWrapper}>
-                        <canvas id={canvasStore.canvasId}/>
-                    </div>
+                    <div className={classes.canvasWrapper} ref={canvasRef}/>
                 </div>
             </div>
         </Layout>

@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {StoreContextProvider} from "./contexts/StoreContext";
+import {StoreProvider} from "./contexts/storeContext";
+import rootStore from "./stores/rootStore";
 
 ReactDOM.render(
     <React.StrictMode>
-        <StoreContextProvider>
+        <StoreProvider value={rootStore}>
             <App/>
-        </StoreContextProvider>
+        </StoreProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

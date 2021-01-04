@@ -1,16 +1,13 @@
-import {Box, Typography} from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {observer} from "mobx-react";
-import {ShapeType} from "../../models/canvas/Shape";
-import {useStores} from "../../hooks/useStores";
+import { observer } from "mobx-react";
+import { ShapeType } from "../../models/tools/Shape";
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
+import { CommonColor } from "../../models/color/CommonColor";
+import PropBoxLayout from "./PropBoxLayout";
 
 const useStyles = makeStyles(theme => ({
-    title: {
-        marginBottom: theme.spacing(3),
-    },
     button: {
         borderRadius: "4px",
         cursor: "pointer",
@@ -34,49 +31,41 @@ const useStyles = makeStyles(theme => ({
 
 const ShapePropBox = observer(() => {
     const classes = useStyles();
-    const {shapeStore} = useStores();
-
-    const handleShapeChange = (type: ShapeType) => {
-        shapeStore.setShapeType(type);
-    }
 
     return (
-        <div>
-            <div className={classes.title}>
-                <Typography variant={"h6"} color={"primary"}>셰이프</Typography>
-            </div>
+        <PropBoxLayout>
             <div>
                 <Box mb={1}>
                     <Typography variant={"caption"}>모양</Typography>
                 </Box>
                 <Box display={"flex"}>
                     <div
-                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.ELLIPSE && classes.selected)}
-                        onClick={() => handleShapeChange(ShapeType.ELLIPSE)}
+                        className={clsx(classes.button)}
+                        onClick={() => console.log(ShapeType.ELLIPSE)}
                     >
                         <svg height="24" width="24">
-                            <circle cx="12" cy="12" r="10" stroke="black" fill="transparent" strokeWidth={2}/>
+                            <circle cx="12" cy="12" r="10" stroke="black" fill="transparent" strokeWidth={2} />
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.RECT && classes.selected)}
-                        onClick={() => handleShapeChange(ShapeType.RECT)}
+                        className={clsx(classes.button)}
+                        onClick={() => console.log(ShapeType.RECT)}
                     >
                         <svg width="24" height="24">
-                            <rect width="24" height="24" stroke="black" fill="transparent" strokeWidth={4}/>
+                            <rect width="24" height="24" stroke="black" fill="transparent" strokeWidth={4} />
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.TRIANGLE && classes.selected)}
-                        onClick={() => handleShapeChange(ShapeType.TRIANGLE)}
+                        className={clsx(classes.button)}
+                        onClick={() => console.log(ShapeType.TRIANGLE)}
                     >
                         <svg width="24" height="24">
-                            <polygon points="12,2 22,22 2,22" stroke="black" fill="transparent" strokeWidth={2}/>
+                            <polygon points="12,2 22,22 2,22" stroke="black" fill="transparent" strokeWidth={2} />
                         </svg>
                     </div>
                 </Box>
             </div>
-        </div>
+        </PropBoxLayout>
     )
 })
 

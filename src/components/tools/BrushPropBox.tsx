@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from "@material-ui/core";
-import { BrushType } from "../../models/canvas/Brush";
+import { BrushType } from "../../models/tools/Brush";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { observer } from "mobx-react";
@@ -9,17 +9,9 @@ import { faPencilAlt, faSprayCan, faCircle } from "@fortawesome/free-solid-svg-i
 import clsx from "clsx";
 import { CommonColor } from "../../models/color/CommonColor";
 import { ColorPalette, Range } from "components/input";
-import { ColorResult } from "react-color";
+import PropBoxLayout from "./PropBoxLayout";
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-    },
-    title: {
-        marginBottom: theme.spacing(3),
-    },
     button: {
         borderRadius: "4px",
         cursor: "pointer",
@@ -38,11 +30,6 @@ const useStyles = makeStyles(theme => ({
             color: "white",
         }
     },
-    propBoxWrapper: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-    },
     propBox: {
         flex: 1,
         "& > div": {
@@ -55,60 +42,43 @@ const BrushPropBox = observer(() => {
     const classes = useStyles();
     const { brushStore } = useStores();
 
-    const handleBrushChange = (value: BrushType) => {
-        brushStore.setBrushType(value);
-    }
-
-    const handleLineWidthChange = (value: number) => {
-        brushStore.setLineWidth(value);
-    }
-
-    const handleColorChange = (color: ColorResult) => {
-        brushStore.setColor(color.hex);
-    }
-
     return (
-        <div className={classes.root}>
-            <div className={classes.title}>
-                <Typography variant={"h6"} color={"primary"}>브러시</Typography>
-            </div>
-            <div className={classes.propBoxWrapper}>
-                <div className={classes.propBox}>
-                    <div>
-                        <Box mb={1}>
-                            <Typography variant={"caption"}>모양</Typography>
-                        </Box>
-                        <Box display="flex">
-                            <div
-                                className={clsx(classes.button, brushStore.brushType === BrushType.PENCIL && classes.selected)}
-                                onClick={() => handleBrushChange(BrushType.PENCIL)}
-                            >
-                                <FontAwesomeIcon icon={faPencilAlt} size="lg" />
-                            </div>
-                            <div
-                                className={clsx(classes.button, brushStore.brushType === BrushType.SPRAY && classes.selected)}
-                                onClick={() => handleBrushChange(BrushType.SPRAY)}
-                            >
-                                <FontAwesomeIcon icon={faSprayCan} size="lg" />
-                            </div>
-                            <div
-                                className={clsx(classes.button, brushStore.brushType === BrushType.CIRCLE && classes.selected)}
-                                onClick={() => handleBrushChange(BrushType.CIRCLE)}
-                            >
-                                <FontAwesomeIcon icon={faCircle} size="lg" />
-                            </div>
-                        </Box>
-                    </div>
-                    <div>
-                        <Range label="두께" value={brushStore.lineWidth} onChange={handleLineWidthChange} prefix={"px"} />
-                    </div>
+        <PropBoxLayout>
+            <div className={classes.propBox}>
+                <div>
+                    <Box mb={1}>
+                        <Typography variant={"caption"}>모양</Typography>
+                    </Box>
+                    <Box display="flex">
+                        <div
+                            className={clsx(classes.button, brushStore.brushType === BrushType.PENCIL && classes.selected)}
+                            onClick={() => brushStore.setBrushType(BrushType.PENCIL)}
+                        >
+                            <FontAwesomeIcon icon={faPencilAlt} size="lg" />
+                        </div>
+                        <div
+                            className={clsx(classes.button, brushStore.brushType === BrushType.SPRAY && classes.selected)}
+                            onClick={() => brushStore.setBrushType(BrushType.SPRAY)}
+                        >
+                            <FontAwesomeIcon icon={faSprayCan} size="lg" />
+                        </div>
+                        <div
+                            className={clsx(classes.button, brushStore.brushType === BrushType.CIRCLE && classes.selected)}
+                            onClick={() => brushStore.setBrushType(BrushType.CIRCLE)}
+                        >
+                            <FontAwesomeIcon icon={faCircle} size="lg" />
+                        </div>
+                    </Box>
                 </div>
                 <div>
-                    <Box paddingTop={3} paddingBottom={3}><Divider/></Box>
-                    <ColorPalette color={brushStore.color} onChange={handleColorChange} disableAlpha={true} />
+                    <Range label="두께" value={brushStore.strokeWidth} onChange={(strokeWidth) => brushStore.setStrokeWidth(strokeWidth)} prefix={"px"} />
                 </div>
             </div>
-        </div>
+            <div>
+                <Box paddingTop={3} paddingBottom={3}><Divider /></Box>
+                <ColorPalette color={brushStore.color} onChange={(color) => brushStore.setColor(color.hex)} disableAlpha={true} />
+            </div>
+        </PropBoxLayout>
     )
 })
 

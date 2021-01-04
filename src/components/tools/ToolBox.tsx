@@ -7,7 +7,7 @@ import ToolButton from "./ToolButton";
 import MouseIcon from '@material-ui/icons/Mouse';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BrushIcon from "@material-ui/icons/Brush";
-import {ToolTypes} from "../../models/canvas/ToolTypes";
+import {ToolTypes} from "../../models/tools/ToolTypes";
 import MenuToolButton from "./MenuToolButton";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import PhotoSizeSelectSmallIcon from "@material-ui/icons/PhotoSizeSelectSmall";
@@ -49,32 +49,32 @@ const ToolBox = observer(() => {
                     <ToolButton
                         icon={<MouseIcon/>}
                         text={"선택"}
-                        onClick={() => canvasStore.selectedTool = ToolTypes.SELECT}
-                        selected={canvasStore.selectedTool === ToolTypes.SELECT}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.SELECT)}
+                        selected={canvasStore.canvasMode === ToolTypes.SELECT}
                     />
                     <ToolButton
                         icon={<BrushIcon/>}
                         text={"브러시"}
-                        onClick={() => canvasStore.selectedTool = ToolTypes.BRUSH}
-                        selected={canvasStore.selectedTool === ToolTypes.BRUSH}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.BRUSH)}
+                        selected={canvasStore.canvasMode === ToolTypes.BRUSH}
                     />
                     <ToolButton
                         icon={<DashboardIcon/>}
                         text={"셰이프"}
-                        onClick={() => canvasStore.selectedTool = ToolTypes.SHAPE}
-                        selected={canvasStore.selectedTool === ToolTypes.SHAPE}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.SHAPE)}
+                        selected={canvasStore.canvasMode === ToolTypes.SHAPE}
                     />
                     <ToolButton
                         icon={<TextFieldsIcon/>}
                         text={"텍스트"}
-                        onClick={() => canvasStore.selectedTool = ToolTypes.TEXT}
-                        selected={canvasStore.selectedTool === ToolTypes.TEXT}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.TEXT)}
+                        selected={canvasStore.canvasMode === ToolTypes.TEXT}
                     />
                     <ToolButton
                         icon={<PhotoSizeSelectSmallIcon/>}
                         text={"캔버스"}
-                        onClick={() => canvasStore.selectedTool = ToolTypes.CANVAS}
-                        selected={canvasStore.selectedTool === ToolTypes.CANVAS}
+                        onClick={() => canvasStore.canvasMode = ToolTypes.CANVAS}
+                        selected={canvasStore.canvasMode === ToolTypes.CANVAS}
                     />
                 </div>
                 <div className={classes.right}>
