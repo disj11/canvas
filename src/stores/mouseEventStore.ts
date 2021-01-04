@@ -46,7 +46,7 @@ export class MouseEventStore {
     private onMouseMove(e: IEvent) {
         this.currentCursorPosition = { ...this.getCursorPosition(e) };
 
-        this.observer.get(MouseEventType.MOUSE_DOWN)?.forEach(callback => callback({
+        this.observer.get(MouseEventType.MOUSE_MOVE)?.forEach(callback => callback({
             startCursorPosition: this.startCursorPosition,
             currentCursorPosition: this.currentCursorPosition,    
         }))

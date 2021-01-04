@@ -6,6 +6,7 @@ import { ShapeType } from "../../models/tools/Shape";
 import clsx from "clsx";
 import { CommonColor } from "../../models/color/CommonColor";
 import PropBoxLayout from "./PropBoxLayout";
+import { useStores } from "hooks/useStores";
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -31,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 const ShapePropBox = observer(() => {
     const classes = useStyles();
+    const { shapeStore } = useStores();
 
     return (
         <PropBoxLayout>
@@ -40,24 +42,24 @@ const ShapePropBox = observer(() => {
                 </Box>
                 <Box display={"flex"}>
                     <div
-                        className={clsx(classes.button)}
-                        onClick={() => console.log(ShapeType.ELLIPSE)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.ELLIPSE && classes.selected)}
+                        onClick={() => shapeStore.setShapeType(ShapeType.ELLIPSE)}
                     >
                         <svg height="24" width="24">
                             <circle cx="12" cy="12" r="10" stroke="black" fill="transparent" strokeWidth={2} />
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button)}
-                        onClick={() => console.log(ShapeType.RECT)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.RECT && classes.selected)}
+                        onClick={() => shapeStore.setShapeType(ShapeType.RECT)}
                     >
                         <svg width="24" height="24">
                             <rect width="24" height="24" stroke="black" fill="transparent" strokeWidth={4} />
                         </svg>
                     </div>
                     <div
-                        className={clsx(classes.button)}
-                        onClick={() => console.log(ShapeType.TRIANGLE)}
+                        className={clsx(classes.button, shapeStore.shapeType === ShapeType.TRIANGLE && classes.selected)}
+                        onClick={() => shapeStore.setShapeType(ShapeType.TRIANGLE)}
                     >
                         <svg width="24" height="24">
                             <polygon points="12,2 22,22 2,22" stroke="black" fill="transparent" strokeWidth={2} />
