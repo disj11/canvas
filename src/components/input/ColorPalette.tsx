@@ -1,4 +1,6 @@
-import {ColorResult, TwitterPicker} from "react-color"
+import { Box } from "@material-ui/core";
+import React from "react";
+import { ColorResult, TwitterPicker } from "react-color"
 import ColorPicker from "./ColorPicker";
 
 interface Props {
@@ -10,8 +12,10 @@ interface Props {
 const ColorPalette = (props: Props) => {
     return (
         <div>
-            <ColorPicker {...props}/>
-            <TwitterPicker width={"100%"} color={props.color} onChangeComplete={props.onChange}/>
+            <Box mb={2}>
+                <ColorPicker {...props} />
+            </Box>
+            <TwitterPicker width={"100%"} color={props.color} onChangeComplete={props.onChange} />
         </div>
     )
 }

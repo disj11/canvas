@@ -7,6 +7,7 @@ interface Props {
     label?: string,
     color: string,
     disableAlpha?: boolean,
+    disabled?: boolean,
     onChange: (color: ColorResult) => void;
 }
 
@@ -17,9 +18,8 @@ const useStyles = makeStyles((theme) => ({
         border: 1,
         borderStyle: "solid",
         borderColor: "#c0c0c0",
-        marginBottom: theme.spacing(2),
         backgroundColor: (props: Props) => props.color,
-        cursor: "pointer",
+        cursor: (props: Props) => !props.disabled ? "pointer" : "default",
     }
 }));
 
@@ -42,7 +42,7 @@ const ColorPicker = (props: Props) => {
             <div>
                 <div className={classes.colorBox} onClick={handleClick} />
                 <Popover
-                    open={open}
+                    open={open && !props.disabled}
                     anchorEl={anchorEl}
                     onClose={handleClose}
                 >

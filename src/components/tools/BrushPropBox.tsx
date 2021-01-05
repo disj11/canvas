@@ -76,7 +76,7 @@ const BrushPropBox = observer(() => {
             </div>
             <div>
                 <Box paddingTop={3} paddingBottom={3}><Divider /></Box>
-                <ColorPalette color={brushStore.color} onChange={(color) => brushStore.setColor(color.hex)} disableAlpha={true} />
+                <ColorPalette color={brushStore.stroke} onChange={(color) => brushStore.setStroke(color.hex)} disableAlpha={true} />
             </div>
         </PropBoxLayout>
     )

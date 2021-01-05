@@ -5,6 +5,7 @@ import { useStores } from "../../hooks/useStores";
 import { ToolTypes } from "../../models/tools/ToolTypes";
 import BrushPropBox from "./BrushPropBox";
 import ShapePropBox from "./ShapePropBox";
+import { ShapeType } from "models/tools/Shape";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,7 +28,12 @@ const PropBox = observer(() => {
                     {selectedTool === ToolTypes.SHAPE && (<ShapePropBox />)}
                 </React.Fragment>}
                 {activeObject && <React.Fragment>
-                    {activeObject.isType("path") && <BrushPropBox/>}
+                    {activeObject.isType("path") && <BrushPropBox />}
+                    {(
+                        activeObject.isType(ShapeType.RECT.value) ||
+                        activeObject.isType(ShapeType.TRIANGLE.value) ||
+                        activeObject.isType(ShapeType.ELLIPSE.value)
+                    ) && <ShapePropBox />}
                 </React.Fragment>}
             </div>
         </React.Fragment>
