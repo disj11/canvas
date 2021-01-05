@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { CommonColor } from "models/color/CommonColor";
 import { ShapeType } from "models/tools/Shape";
 import { ToolTypes } from "models/tools/ToolTypes";
 import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
@@ -7,16 +6,16 @@ import { ObjectManagerStore } from "./objectManagerStore";
 import { RootStore } from "./rootStore";
 
 const defaultStyles = {
-    shapeType: ShapeType.RECT,
-    fill: CommonColor.PRIMARY,
+    shapeType: ShapeType.ELLIPSE,
+    fill: undefined,
     strokeWidth: 3,
     stroke: "#000000",
 }
 
 interface ShapeStyles {
-    fill: string;
+    fill: string | undefined;
     strokeWidth: number;
-    stroke: string;
+    stroke: string | undefined;
 }
 
 const MIN_OBJECT_SIZE = 10;
@@ -26,12 +25,12 @@ export class ShapeStore {
     private readonly mouseEventStore: MouseEventStore;
     private readonly objectManager: ObjectManagerStore;
     private isDragMode = false;
-    private item: fabric.Rect | fabric.Triangle | fabric.Ellipse | undefined;
 
+    item: fabric.Rect | fabric.Triangle | fabric.Ellipse | undefined;
     shapeType = defaultStyles.shapeType;
-    fill = defaultStyles.fill;
+    fill: string | undefined = defaultStyles.fill;
     strokeWidth = defaultStyles.strokeWidth;
-    stroke = defaultStyles.stroke;
+    stroke: string | undefined = defaultStyles.stroke;
 
     constructor(private readonly rootStore: RootStore) {
         makeAutoObservable(this);
@@ -46,7 +45,7 @@ export class ShapeStore {
         this.shapeType = shapeType;
     }
 
-    setFill(fill: string) {
+    setFill(fill: string | undefined) {
         this.fill = fill;
         if (this.item) {
             this.item.set({ fill: fill });
@@ -54,7 +53,7 @@ export class ShapeStore {
         }
     }
 
-    setStroke(stroke: string) {
+    setStroke(stroke: string | undefined) {
         this.stroke = stroke;
         if (this.item) {
             this.item.set({ stroke: stroke });
@@ -101,8 +100,8 @@ export class ShapeStore {
         } = this.item;
 
         this.setShapeStyles({
-            fill: !fill ? defaultStyles.fill : fill as string,
-            stroke: stroke || defaultStyles.stroke,
+            fill: fill === undefined ? defaultStyles.fill : fill as string,
+            stroke: stroke,
             strokeWidth: strokeWidth || defaultStyles.strokeWidth,
         })
     }
@@ -135,6 +134,7 @@ export class ShapeStore {
             fill: this.fill,
             selectable: false,
             hoverCursor: "default",
+            strokeUniform: true,
         });
 
         if (this.item.isType(ShapeType.RECT.value) || this.item.isType(ShapeType.TRIANGLE.value)) {

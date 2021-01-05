@@ -19,10 +19,10 @@ export class BrushStore {
     brushType = defaultStyles.brushType;
     stroke = defaultStyles.stroke;
     strokeWidth = defaultStyles.strokeWidth;
+    item: fabric.Path | undefined;
 
     private readonly canvas: fabric.Canvas;
     private readonly objectManager: ObjectManagerStore;
-    private item: fabric.Path | undefined;
 
     constructor(
         private readonly rootStore: RootStore,

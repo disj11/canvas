@@ -45,7 +45,7 @@ const BrushPropBox = observer(() => {
     return (
         <PropBoxLayout>
             <div className={classes.propBox}>
-                <div>
+                {!brushStore.item && <div>
                     <Box mb={1}>
                         <Typography variant={"caption"}>모양</Typography>
                     </Box>
@@ -69,7 +69,7 @@ const BrushPropBox = observer(() => {
                             <FontAwesomeIcon icon={faCircle} size="lg" />
                         </div>
                     </Box>
-                </div>
+                </div>}
                 <div>
                     <Range label="두께" value={brushStore.strokeWidth} onChange={(strokeWidth) => brushStore.setStrokeWidth(strokeWidth)} prefix={"px"} />
                 </div>

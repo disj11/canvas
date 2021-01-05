@@ -9,13 +9,13 @@ import { ColorResult } from "react-color"
 import ColorPicker from "./ColorPicker"
 
 interface Props {
-    color: string;
-    onChange: (color: string) => void;
+    color: string | undefined;
+    onChange: (color: string | undefined) => void;
 }
 
 const ColorSelect = ({ color, onChange }: Props) => {
     const previousColor = usePrevious(color);
-    const [selectedValue, setSelectedValue] = React.useState<string>(color === "transparent" ? "none" : "solid");
+    const [selectedValue, setSelectedValue] = React.useState<string>(!color ? "none" : "solid");
 
     const handleColorChange = (color: ColorResult) => {
         const rgb = !color.rgb.a && color.rgb.a !== 0 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
@@ -27,7 +27,7 @@ const ColorSelect = ({ color, onChange }: Props) => {
         setSelectedValue(value);
 
         if (value === "none") {
-            onChange("transparent");
+            onChange(undefined);
         } else {
             onChange(previousColor || CommonColor.PRIMARY);
         }

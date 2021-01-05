@@ -22,12 +22,12 @@ const useStyles = makeStyles(theme => ({
 
 const PropBoxLayout: React.FC = observer(({ children }) => {
     const classes = useStyles();
-    const { canvasStore } = useStores();
+    const { canvasStore, objectManagerStore } = useStores();
 
     return (
         <div className={classes.root}>
             <div className={classes.title}>
-                <Typography variant={"h6"} color={"primary"}>{canvasStore.canvasMode.display}</Typography>
+                <Typography variant={"h6"} color={"primary"}>{objectManagerStore.activeObject ? objectManagerStore.getObjectTypeName() : canvasStore.canvasMode.display}</Typography>
             </div>
             <div className={classes.propBoxWrapper}>
                 {children}

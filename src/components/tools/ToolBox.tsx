@@ -48,31 +48,31 @@ const ToolBox = observer(() => {
                 <div className={classes.center}>
                     <ToolButton
                         icon={<MouseIcon/>}
-                        text={"선택"}
+                        text={ToolTypes.SELECT.display}
                         onClick={() => canvasStore.setCanvasMode(ToolTypes.SELECT)}
                         selected={canvasStore.canvasMode === ToolTypes.SELECT}
                     />
                     <ToolButton
                         icon={<BrushIcon/>}
-                        text={"브러시"}
+                        text={ToolTypes.BRUSH.display}
                         onClick={() => canvasStore.setCanvasMode(ToolTypes.BRUSH)}
                         selected={canvasStore.canvasMode === ToolTypes.BRUSH}
                     />
                     <ToolButton
                         icon={<DashboardIcon/>}
-                        text={"셰이프"}
+                        text={ToolTypes.SHAPE.display}
                         onClick={() => canvasStore.setCanvasMode(ToolTypes.SHAPE)}
                         selected={canvasStore.canvasMode === ToolTypes.SHAPE}
                     />
                     <ToolButton
                         icon={<TextFieldsIcon/>}
-                        text={"텍스트"}
+                        text={ToolTypes.TEXT.display}
                         onClick={() => canvasStore.setCanvasMode(ToolTypes.TEXT)}
                         selected={canvasStore.canvasMode === ToolTypes.TEXT}
                     />
                     <ToolButton
                         icon={<PhotoSizeSelectSmallIcon/>}
-                        text={"캔버스"}
+                        text={ToolTypes.CANVAS.display}
                         onClick={() => canvasStore.canvasMode = ToolTypes.CANVAS}
                         selected={canvasStore.canvasMode === ToolTypes.CANVAS}
                     />

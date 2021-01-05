@@ -3,6 +3,7 @@ import { BrushStore } from "./brushStore";
 import { CanvasStore } from "./canvasStore";
 import { MouseEventStore } from "./mouseEventStore";
 import { ObjectManagerStore } from "./objectManagerStore";
+import { ObjectEventStore } from "./objectEventStore";
 import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
 
@@ -10,6 +11,7 @@ export class RootStore {
     private readonly canvasElement: HTMLCanvasElement;
     canvasStore: CanvasStore;
     objectManagerStore: ObjectManagerStore;
+    objectEventStore: ObjectEventStore;
     mouseEventStore: MouseEventStore;
     brushStore: BrushStore;
     shapeStore: ShapeStore;
@@ -21,6 +23,7 @@ export class RootStore {
 
         this.canvasStore = new CanvasStore(this, new fabric.Canvas(this.canvasElement));
         this.objectManagerStore = new ObjectManagerStore(this);
+        this.objectEventStore = new ObjectEventStore(this);
         this.mouseEventStore = new MouseEventStore(this);
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);

@@ -43,7 +43,7 @@ const ShapePropBox = observer(() => {
     return (
         <PropBoxLayout>
             <div className={classes.propBox}>
-                <div>
+                {!shapeStore.item && <div>
                     <Box mb={1}>
                         <Typography variant={"caption"}>모양</Typography>
                     </Box>
@@ -73,12 +73,12 @@ const ShapePropBox = observer(() => {
                             </svg>
                         </div>
                     </Box>
-                </div>
+                </div>}
                 <div>
                     <Box mb={1}>
                         <Typography variant={"caption"}>채우기</Typography>
                         <div>
-                            <ColorSelect color={shapeStore.fill} onChange={color => shapeStore.setFill(color)} />
+                            <ColorSelect color={shapeStore.fill} onChange={(color: string | undefined) => shapeStore.setFill(color)} />
                         </div>
                     </Box>
                 </div>
@@ -86,7 +86,7 @@ const ShapePropBox = observer(() => {
                     <Box mb={1}>
                         <Typography variant={"caption"}>선 색상</Typography>
                         <div>
-                            <ColorSelect color={shapeStore.stroke} onChange={color => shapeStore.setStroke(color)} />
+                            <ColorSelect color={shapeStore.stroke} onChange={(color: string | undefined) => shapeStore.setStroke(color)} />
                         </div>
                     </Box>
                 </div>

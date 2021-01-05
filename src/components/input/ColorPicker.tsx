@@ -5,7 +5,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface Props {
     label?: string,
-    color: string,
+    color: string | undefined,
     disableAlpha?: boolean,
     disabled?: boolean,
     onChange: (color: ColorResult) => void;
