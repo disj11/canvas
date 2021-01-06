@@ -3,6 +3,7 @@ import { RootStore } from "./rootStore";
 
 export enum ObjectEventType {
     OBJECT_SCALING = "object:scaling",
+    OBJECT_MODIFIED = "object:modified",
 }
 
 export class ObjectEventStore {
@@ -15,10 +16,15 @@ export class ObjectEventStore {
     private addEventListener() {
         const {canvas} = this.rootStore.canvasStore;
         canvas.on(ObjectEventType.OBJECT_SCALING, this.onScaling.bind(this));
+        canvas.on(ObjectEventType.OBJECT_MODIFIED, this.onModified.bind(this));
     }
 
     private onScaling(e: IEvent) {
         this.observer.get(ObjectEventType.OBJECT_SCALING)?.forEach(callbackFn => callbackFn(e));
+    }
+
+    private onModified(e: IEvent) {
+        this.observer.get(ObjectEventType.OBJECT_MODIFIED)?.forEach(callbackFn => callbackFn(e));
     }
 
     subscribe(eventType: ObjectEventType, listener: (e: IEvent) => void) {

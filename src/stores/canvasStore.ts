@@ -32,6 +32,7 @@ export class CanvasStore {
         this.canvasMode = mode;
         this.canvas.discardActiveObject().renderAll();
         this.canvas.isDrawingMode = mode === ToolTypes.BRUSH;
+        this.canvas.defaultCursor = "default";
         this.setSelectable(false);
 
         if (mode === ToolTypes.BRUSH) {
@@ -39,6 +40,10 @@ export class CanvasStore {
             brushStore.setBrushType(brushStore.brushType);
         } else if (mode === ToolTypes.SELECT) {
             this.setSelectable(true);
+        } else if (mode === ToolTypes.SHAPE) {
+            this.canvas.defaultCursor = "crosshair";
+        } else if (mode === ToolTypes.TEXT) {
+            this.canvas.defaultCursor = "text";
         }
     }
 

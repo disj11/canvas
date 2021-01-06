@@ -10,6 +10,8 @@ interface Props {
     value: number;
     onChange: (value: number) => void;
     prefix?: string;
+    min?: number;
+    max?: number;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Range = ({ label, value, onChange, prefix }: Props) => {
+const Range = ({ label, value, onChange, prefix, min, max }: Props) => {
     const classes = useStyles();
 
     const handleSliderChange = (event: any, newValue: number | number[]) => {
@@ -45,6 +47,8 @@ const Range = ({ label, value, onChange, prefix }: Props) => {
             </div>
             <div>
                 <Slider
+                    min={min}
+                    max={max}
                     value={value}
                     onChange={handleSliderChange}
                 />

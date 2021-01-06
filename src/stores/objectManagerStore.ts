@@ -49,6 +49,7 @@ export class ObjectManagerStore {
         reaction(
             () => this.activeObject,
             () => {
+                console.log(this.activeObject);
                 this.observer.forEach(callback => callback(this.activeObject));
             },
         );
@@ -82,6 +83,10 @@ export class ObjectManagerStore {
         return this.activeObject?.isType("path");
     }
 
+    isText() {
+        return this.activeObject?.isType("i-text");
+    }
+
     getObjectTypeName(): string {
         if (this.isRect()) {
             return ShapeType.RECT.display;
@@ -91,6 +96,8 @@ export class ObjectManagerStore {
             return ShapeType.TRIANGLE.display;
         } else if (this.isPath()) {
             return "패스";
+        } else if (this.isText()) {
+            return "텍스트";
         } else {
             return "오브젝트";
         }

@@ -6,6 +6,7 @@ import { ObjectManagerStore } from "./objectManagerStore";
 import { ObjectEventStore } from "./objectEventStore";
 import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
+import { TextStore } from "./textStore";
 
 export class RootStore {
     private readonly canvasElement: HTMLCanvasElement;
@@ -15,6 +16,7 @@ export class RootStore {
     mouseEventStore: MouseEventStore;
     brushStore: BrushStore;
     shapeStore: ShapeStore;
+    textStore: TextStore;
     UIStore: UIStore;
 
     constructor() {
@@ -27,6 +29,7 @@ export class RootStore {
         this.mouseEventStore = new MouseEventStore(this);
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);
+        this.textStore = new TextStore(this);
         this.UIStore = new UIStore(this);
     }
 

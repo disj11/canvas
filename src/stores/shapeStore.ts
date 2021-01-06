@@ -18,9 +18,8 @@ interface ShapeStyles {
     stroke: string | undefined;
 }
 
-const MIN_OBJECT_SIZE = 10;
-
 export class ShapeStore {
+    private static readonly MIN_OBJECT_SIZE = 30;
     private readonly canvas: fabric.Canvas;
     private readonly mouseEventStore: MouseEventStore;
     private readonly objectManager: ObjectManagerStore;
@@ -112,7 +111,7 @@ export class ShapeStore {
         this.mouseEventStore.subscribe(MouseEventType.MOUSE_MOVE, this.onMouseMove.bind(this));
     }
 
-    private isDrawingShapeMode() {
+    private isShapeTool() {
         return this.rootStore.canvasStore.canvasMode === ToolTypes.SHAPE;
     }
 
@@ -121,7 +120,7 @@ export class ShapeStore {
     }
 
     private onMouseDown(e: MouseEventObject) {
-        if (!this.isDrawingShapeMode()) {
+        if (!this.isShapeTool()) {
             return;
         }
 
@@ -153,7 +152,7 @@ export class ShapeStore {
     }
 
     private onMouseMove(e: MouseEventObject) {
-        if (!this.isDrawingShapeMode() || !this.isDragMode || !this.item) {
+        if (!this.isShapeTool() || !this.isDragMode || !this.item) {
             return;
         }
 
@@ -184,21 +183,21 @@ export class ShapeStore {
     }
 
     private onMouseUp(e: MouseEventObject) {
-        if (!this.isDrawingShapeMode() || !this.item) {
+        if (!this.isShapeTool() || !this.item) {
             return;
         }
 
         this.isDragMode = false;
         if (this.item.isType(ShapeType.RECT.value) || this.item.isType(ShapeType.TRIANGLE.value)) {
             this.item.set({
-                width: Math.max(MIN_OBJECT_SIZE, this.item.width || MIN_OBJECT_SIZE),
-                height: Math.max(MIN_OBJECT_SIZE, this.item.height || MIN_OBJECT_SIZE),
+                width: Math.max(ShapeStore.MIN_OBJECT_SIZE, this.item.width || ShapeStore.MIN_OBJECT_SIZE),
+                height: Math.max(ShapeStore.MIN_OBJECT_SIZE, this.item.height || ShapeStore.MIN_OBJECT_SIZE),
             }).setCoords();
         } else if (this.item.isType(ShapeType.ELLIPSE.value)) {
             const circle = this.item as fabric.Ellipse;
             circle.set({
-                rx: Math.max(MIN_OBJECT_SIZE / 2, circle.rx || MIN_OBJECT_SIZE / 2),
-                ry: Math.max(MIN_OBJECT_SIZE / 2, circle.ry || MIN_OBJECT_SIZE / 2),
+                rx: Math.max(ShapeStore.MIN_OBJECT_SIZE / 2, circle.rx || ShapeStore.MIN_OBJECT_SIZE / 2),
+                ry: Math.max(ShapeStore.MIN_OBJECT_SIZE / 2, circle.ry || ShapeStore.MIN_OBJECT_SIZE / 2),
             }).setCoords();
         }
 

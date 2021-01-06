@@ -71,7 +71,13 @@ const BrushPropBox = observer(() => {
                     </Box>
                 </div>}
                 <div>
-                    <Range label="두께" value={brushStore.strokeWidth} onChange={(strokeWidth) => brushStore.setStrokeWidth(strokeWidth)} prefix={"px"} />
+                    <Range
+                        label="두께"
+                        value={brushStore.strokeWidth}
+                        onChange={(strokeWidth) => brushStore.setStrokeWidth(strokeWidth)}
+                        prefix={"px"}
+                        min={1}
+                    />
                 </div>
             </div>
             <div>
