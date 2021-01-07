@@ -6,13 +6,19 @@ import { ObjectEventStore, ObjectEventType } from "./objectEventStore";
 import { IEvent } from "fabric/fabric-impl";
 import { ObjectManagerStore } from "./objectManagerStore";
 import { makeAutoObservable } from "mobx";
+import { FontFaces, fontSizes } from "models/tools/Text";
+import WebFont from "webfontloader";
 
 const defaultStyles = {
-    FONT_SIZE: 30,
+    FONT_SIZE: fontSizes[fontSizes.length / 2],
+    FILL: "#000000",
+    FONT_FAMILY: FontFaces.TIMES_NEW_ROMAN.value,
 }
 
 interface TextStyles {
     fontSize: number,
+    fill: string,
+    fontFamily: string,
 }
 
 export class TextStore {
@@ -22,21 +28,41 @@ export class TextStore {
     private readonly canvas: fabric.Canvas;
 
     fontSize = defaultStyles.FONT_SIZE;
+    fill = defaultStyles.FILL;
+    fontFamily = defaultStyles.FONT_FAMILY;
     item: fabric.IText | undefined;
 
     constructor(private readonly rootStore: RootStore) {
         makeAutoObservable(this);
+        this.loadFont();
         this.objectManager = rootStore.objectManagerStore;
         this.mouseEventStore = rootStore.mouseEventStore;
         this.objectEventStore = rootStore.objectEventStore;
         this.canvas = rootStore.canvasStore.canvas;
         this.addEventListener();
+        this.addFontAutoRender();
     }
 
     setFontSize(fontSize: number) {
         this.fontSize = fontSize;
         if (this.item) {
-            this.item.set({fontSize: fontSize});
+            this.item.set({ fontSize: fontSize });
+            this.canvas.renderAll();
+        }
+    }
+
+    setFill(fill: string) {
+        this.fill = fill;
+        if (this.item) {
+            this.item.set({ fill: fill });
+            this.canvas.renderAll();
+        }
+    }
+
+    setFontFamily(fontFamily: string) {
+        this.fontFamily = fontFamily;
+        if (this.item) {
+            this.item.set({ fontFamily: fontFamily });
             this.canvas.renderAll();
         }
     }
@@ -63,15 +89,21 @@ export class TextStore {
 
         const {
             fontSize,
+            fill,
+            fontFamily,
         } = this.item;
 
         this.setTextStyles({
             fontSize: fontSize || defaultStyles.FONT_SIZE,
+            fill: !fill ? defaultStyles.FILL : fill as string,
+            fontFamily: fontFamily || defaultStyles.FONT_FAMILY,
         })
     }
 
     private setTextStyles(styles: TextStyles) {
         this.setFontSize(styles.fontSize);
+        this.setFill(styles.fill);
+        this.setFontFamily(styles.fontFamily);
     }
 
     private onMouseUp(e: MouseEventObject) {
@@ -82,8 +114,10 @@ export class TextStore {
         this.item = new fabric.IText("텍스트를 입력해주세요", {
             top: e.currentCursorPosition.y,
             left: e.currentCursorPosition.x,
+            fontFamily: this.fontFamily,
             fontSize: this.fontSize,
             lockUniScaling: true,
+            fill: this.fill,
         });
 
         this.item.setControlVisible("mt", false);
@@ -121,5 +155,27 @@ export class TextStore {
 
     private isText(object: fabric.Object) {
         return object.isType("i-text");
+    }
+
+    private loadFont() {
+        WebFont.load({
+            google: {
+                families: FontFaces.getGoogleFonts().map(font => font.value),
+            },
+        })
+    }
+
+    private addFontAutoRender() {
+        setInterval(() => {
+            this.canvas.getActiveObjects()
+                .filter(object => this.isText(object))
+                .forEach((object) => {
+                    const textObject = object as fabric.IText;
+                    textObject.initDimensions();
+                    textObject.dirty = true;
+                });
+            fabric.util.clearFabricFontCache();
+            this.canvas.renderAll();
+        }, 500);
     }
 }

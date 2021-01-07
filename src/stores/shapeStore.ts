@@ -99,7 +99,7 @@ export class ShapeStore {
         } = this.item;
 
         this.setShapeStyles({
-            fill: fill === undefined ? defaultStyles.fill : fill as string,
+            fill: fill === undefined ? fill : fill as string,
             stroke: stroke,
             strokeWidth: strokeWidth || defaultStyles.strokeWidth,
         })
