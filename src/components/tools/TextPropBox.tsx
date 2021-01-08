@@ -1,7 +1,7 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import React from "react";
 import PropBoxLayout from "./PropBoxLayout";
-import { AlignButton, ColorPicker } from "../input";
+import { AlignButton, ColorPicker, TextStyleButton } from "../input";
 import { useStores } from "hooks/useStores";
 import { observer } from "mobx-react";
 import { Box, FormControl, Select } from "@material-ui/core";
@@ -53,8 +53,9 @@ const TextPropBox = observer(() => {
                                     value={textStore.fontSize}
                                     onChange={handleFontSizeChange}
                                 >
+                                    <MenuItem value={textStore.fontSize}>{textStore.fontSize}</MenuItem>
                                     {fontSizes.map(fontSize => (
-                                        <MenuItem key={fontSize} value={fontSize}>{fontSize}</MenuItem>
+                                        textStore.fontSize !== fontSize && <MenuItem key={fontSize} value={fontSize}>{fontSize}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -65,7 +66,17 @@ const TextPropBox = observer(() => {
                     </Box>
                 </div>
                 <div>
-                    <AlignButton/>
+                    <TextStyleButton
+                        bold={textStore.isBold()}
+                        italic={textStore.isItalic()}
+                        underline={textStore.underline}
+                        toggleBold={(bold) => textStore.setBold(bold)}
+                        toggleItalic={(italic) => textStore.setItalic(italic)}
+                        toggleUnderline={(underline) => textStore.setUnderline(underline)}
+                    />
+                </div>
+                <div>
+                    <AlignButton textAlign={textStore.textAlign} onChange={(textAlign) => textStore.setTextAlign(textAlign)} />
                 </div>
             </div>
         </PropBoxLayout>

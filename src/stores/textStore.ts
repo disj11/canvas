@@ -1,46 +1,83 @@
 import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
-import { RootStore } from "./rootStore";
+import { RootStore, Store } from "./rootStore";
 import { fabric } from "fabric";
 import { ToolTypes } from "models/tools/ToolTypes";
 import { ObjectEventStore, ObjectEventType } from "./objectEventStore";
 import { IEvent } from "fabric/fabric-impl";
 import { ObjectManagerStore } from "./objectManagerStore";
 import { makeAutoObservable } from "mobx";
-import { FontFaces, fontSizes } from "models/tools/Text";
+import { FontFaces, fontSizes, FontStyle, FontWeight, TextAlign } from "models/tools/Text";
 import WebFont from "webfontloader";
+import { CanvasModeManager } from "./canvasStore";
 
 const defaultStyles = {
     FONT_SIZE: fontSizes[fontSizes.length / 2],
     FILL: "#000000",
     FONT_FAMILY: FontFaces.TIMES_NEW_ROMAN.value,
+    TEXT_ALIGN: TextAlign.LEFT,
+    FONT_STYLE: FontStyle.NORMAL,
+    FONT_WEIGHT: FontWeight.NORMAL,
+    UNDERLINE: false,
 }
 
 interface TextStyles {
     fontSize: number,
     fill: string,
     fontFamily: string,
+    textAlign: string,
+    fontStyle: string,
+    fontWeight: string | number,
+    underline: boolean,
 }
 
-export class TextStore {
+export class TextStore implements Store, CanvasModeManager {
     private readonly objectManager: ObjectManagerStore;
     private readonly mouseEventStore: MouseEventStore;
     private readonly objectEventStore: ObjectEventStore;
     private readonly canvas: fabric.Canvas;
+    private readonly listeners: any;
+    private fontStyle = defaultStyles.FONT_STYLE;
+    private fontWeight = defaultStyles.FONT_WEIGHT;
+    private autoRenderId: NodeJS.Timeout | undefined;
 
     fontSize = defaultStyles.FONT_SIZE;
     fill = defaultStyles.FILL;
     fontFamily = defaultStyles.FONT_FAMILY;
+    textAlign = defaultStyles.TEXT_ALIGN;
+    underline = defaultStyles.UNDERLINE;
     item: fabric.IText | undefined;
 
     constructor(private readonly rootStore: RootStore) {
         makeAutoObservable(this);
+        rootStore.canvasStore.registerCanvasModeManager(ToolTypes.TEXT, this);
         this.loadFont();
         this.objectManager = rootStore.objectManagerStore;
         this.mouseEventStore = rootStore.mouseEventStore;
         this.objectEventStore = rootStore.objectEventStore;
         this.canvas = rootStore.canvasStore.canvas;
+        this.listeners = {
+            onMouseUp: this.onMouseUp.bind(this),
+            onModified: this.onModified.bind(this),
+            updateObject: this.updateObject.bind(this),
+        }
+    }
+
+    onInit() {
         this.addEventListener();
         this.addFontAutoRender();
+    }
+
+    onDestory() {
+        this.removeEventListener();
+        this.removeFontAutoRender();
+    }
+
+    onSessionStart() {
+        this.rootStore.canvasStore.setAllCursor("text");
+    }
+
+    onSessionEnd() {
+        //
     }
 
     setFontSize(fontSize: number) {
@@ -67,10 +104,58 @@ export class TextStore {
         }
     }
 
+    setTextAlign(textAlign: string) {
+        this.textAlign = textAlign;
+        if (this.item) {
+            this.item.set({ textAlign: textAlign });
+            this.canvas.renderAll();
+        }
+    }
+
+    setUnderline(underline: boolean) {
+        this.underline = underline;
+        if (this.item) {
+            this.item.set({ underline: underline });
+            this.canvas.renderAll();
+        }
+    }
+
+    setBold(bold: boolean) {
+        const changedValue = bold ? FontWeight.BOLD : FontWeight.NORMAL;
+        this.fontWeight = changedValue;
+        if (this.item) {
+            this.item.set({ fontWeight: changedValue });
+            this.canvas.renderAll();
+        }
+    }
+
+    isBold() {
+        return this.fontWeight === FontWeight.BOLD;
+    }
+
+    setItalic(italic: boolean) {
+        const changedValue = italic ? FontStyle.ITALIC : FontStyle.NORMAL;
+        this.fontStyle = changedValue;
+        if (this.item) {
+            this.item.set({ fontStyle: changedValue as any });
+            this.canvas.renderAll();
+        }
+    }
+
+    isItalic() {
+        return this.fontStyle === FontStyle.ITALIC;
+    }
+
     private addEventListener() {
-        this.mouseEventStore.subscribe(MouseEventType.MOUSE_UP, this.onMouseUp.bind(this));
-        this.objectEventStore.subscribe(ObjectEventType.OBJECT_MODIFIED, this.onModified.bind(this));
-        this.objectManager.subscribe(this.updateObject.bind(this));
+        this.mouseEventStore.subscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
+        this.objectEventStore.subscribe(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
+        this.objectManager.subscribe(this.listeners.updateObject);
+    }
+
+    private removeEventListener() {
+        this.mouseEventStore.unsubscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
+        this.objectEventStore.unsubscribe(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
+        this.objectManager.unsubscribe(this.listeners.updateObject);
     }
 
     private updateObject(object: fabric.Object | undefined) {
@@ -91,12 +176,20 @@ export class TextStore {
             fontSize,
             fill,
             fontFamily,
+            textAlign,
+            fontStyle,
+            fontWeight,
+            underline,
         } = this.item;
 
         this.setTextStyles({
             fontSize: fontSize || defaultStyles.FONT_SIZE,
             fill: !fill ? defaultStyles.FILL : fill as string,
             fontFamily: fontFamily || defaultStyles.FONT_FAMILY,
+            textAlign: textAlign || defaultStyles.TEXT_ALIGN,
+            fontStyle: fontStyle || defaultStyles.FONT_STYLE,
+            fontWeight: fontWeight || defaultStyles.FONT_WEIGHT,
+            underline: !!underline,
         })
     }
 
@@ -104,6 +197,7 @@ export class TextStore {
         this.setFontSize(styles.fontSize);
         this.setFill(styles.fill);
         this.setFontFamily(styles.fontFamily);
+        this.setTextAlign(styles.textAlign);
     }
 
     private onMouseUp(e: MouseEventObject) {
@@ -116,6 +210,7 @@ export class TextStore {
             left: e.currentCursorPosition.x,
             fontFamily: this.fontFamily,
             fontSize: this.fontSize,
+            textAlign: this.textAlign,
             lockUniScaling: true,
             fill: this.fill,
         });
@@ -166,7 +261,7 @@ export class TextStore {
     }
 
     private addFontAutoRender() {
-        setInterval(() => {
+        this.autoRenderId = setInterval(() => {
             this.canvas.getActiveObjects()
                 .filter(object => this.isText(object))
                 .forEach((object) => {
@@ -176,6 +271,12 @@ export class TextStore {
                 });
             fabric.util.clearFabricFontCache();
             this.canvas.renderAll();
-        }, 500);
+        }, 1000);
+    }
+
+    private removeFontAutoRender() {
+        if (this.autoRenderId) {
+            clearInterval(this.autoRenderId);
+        }
     }
 }

@@ -1,9 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { ShapeType } from "models/tools/Shape";
 import { ToolTypes } from "models/tools/ToolTypes";
+import { CanvasModeManager } from "./canvasStore";
 import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
 import { ObjectManagerStore } from "./objectManagerStore";
-import { RootStore } from "./rootStore";
+import { RootStore, Store } from "./rootStore";
 
 const defaultStyles = {
     shapeType: ShapeType.ELLIPSE,
@@ -18,11 +19,12 @@ interface ShapeStyles {
     stroke: string | undefined;
 }
 
-export class ShapeStore {
+export class ShapeStore implements Store, CanvasModeManager {
     private static readonly MIN_OBJECT_SIZE = 30;
     private readonly canvas: fabric.Canvas;
     private readonly mouseEventStore: MouseEventStore;
     private readonly objectManager: ObjectManagerStore;
+    private readonly listeners: any;
     private isDragMode = false;
 
     item: fabric.Rect | fabric.Triangle | fabric.Ellipse | undefined;
@@ -33,11 +35,34 @@ export class ShapeStore {
 
     constructor(private readonly rootStore: RootStore) {
         makeAutoObservable(this);
+        rootStore.canvasStore.registerCanvasModeManager(ToolTypes.SHAPE, this);
         this.canvas = rootStore.canvasStore.canvas;
         this.mouseEventStore = rootStore.mouseEventStore;
         this.objectManager = rootStore.objectManagerStore;
+        this.listeners = {
+            onMouseUp: this.onMouseUp.bind(this),
+            onMouseDown: this.onMouseDown.bind(this),
+            onMouseMove: this.onMouseMove.bind(this),
+            updateObject: this.updateObject.bind(this),
+        }
+    }
+
+    onInit() {
         this.addEventListeners();
         this.addReactions();
+    }
+
+    onDestory() {
+        this.removeEventListener();
+        this.removeReactions();
+    }
+
+    onSessionStart() {
+        this.rootStore.canvasStore.setAllCursor("crosshair");
+    }
+
+    onSessionEnd() {
+        //
     }
 
     setShapeType(shapeType: ShapeType) {
@@ -69,7 +94,11 @@ export class ShapeStore {
     }
 
     private addReactions() {
-        this.objectManager.subscribe(this.updateObject.bind(this));
+        this.objectManager.subscribe(this.listeners.updateObject);
+    }
+
+    private removeReactions() {
+        this.objectManager.unsubscribe(this.listeners.updateObject);
     }
 
     private updateObject(object: fabric.Object | undefined) {
@@ -106,9 +135,15 @@ export class ShapeStore {
     }
 
     private addEventListeners() {
-        this.mouseEventStore.subscribe(MouseEventType.MOUSE_UP, this.onMouseUp.bind(this));
-        this.mouseEventStore.subscribe(MouseEventType.MOUSE_DOWN, this.onMouseDown.bind(this));
-        this.mouseEventStore.subscribe(MouseEventType.MOUSE_MOVE, this.onMouseMove.bind(this));
+        this.mouseEventStore.subscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
+        this.mouseEventStore.subscribe(MouseEventType.MOUSE_DOWN, this.listeners.onMouseDown);
+        this.mouseEventStore.subscribe(MouseEventType.MOUSE_MOVE, this.listeners.onMouseMove);
+    }
+
+    private removeEventListener() {
+        this.mouseEventStore.unsubscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
+        this.mouseEventStore.unsubscribe(MouseEventType.MOUSE_DOWN, this.listeners.onMouseDown);
+        this.mouseEventStore.unsubscribe(MouseEventType.MOUSE_MOVE, this.listeners.onMouseMove);
     }
 
     private isShapeTool() {

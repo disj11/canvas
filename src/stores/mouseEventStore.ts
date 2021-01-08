@@ -1,5 +1,5 @@
 import { IEvent } from "fabric/fabric-impl";
-import { RootStore } from "./rootStore";
+import { RootStore, Store } from "./rootStore";
 
 export enum MouseEventType {
     MOUSE_UP = "mouse:up",
@@ -12,13 +12,27 @@ export interface MouseEventObject {
     currentCursorPosition: {x: number, y: number},
 }
 
-export class MouseEventStore {
+export class MouseEventStore implements Store {
+    private readonly listeners: any;
     private startCursorPosition = { x: 0, y: 0 };
     private currentCursorPosition = { x: 0, y: 0 };
     private observer: Map<MouseEventType, Array<(e: MouseEventObject) => void>> = new Map();
 
     constructor(private readonly rootStore: RootStore) {
+        // this.addEventListeners();
+        this.listeners = {
+            onMouseDown: this.onMouseDown.bind(this),
+            onMouseUp: this.onMouseUp.bind(this),
+            onMouseMove: this.onMouseMove.bind(this),
+        }
+    }
+
+    onInit() {
         this.addEventListeners();
+    }
+
+    onDestory() {
+        this.removeEventListeners();
     }
 
     subscribe(eventType: MouseEventType, listener: (e: MouseEventObject) => void) {
@@ -63,9 +77,16 @@ export class MouseEventStore {
 
     private addEventListeners() {
         const { canvas } = this.rootStore.canvasStore;
-        canvas.on(MouseEventType.MOUSE_DOWN, this.onMouseDown.bind(this));
-        canvas.on(MouseEventType.MOUSE_MOVE, this.onMouseMove.bind(this));
-        canvas.on(MouseEventType.MOUSE_UP, this.onMouseUp.bind(this));
+        canvas.on(MouseEventType.MOUSE_DOWN, this.listeners.onMouseDown);
+        canvas.on(MouseEventType.MOUSE_MOVE, this.listeners.onMouseMove);
+        canvas.on(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
+    }
+
+    private removeEventListeners() {
+        const { canvas } = this.rootStore.canvasStore;
+        canvas.off(MouseEventType.MOUSE_DOWN, this.listeners.onMouseDown);
+        canvas.off(MouseEventType.MOUSE_MOVE, this.listeners.onMouseMove);
+        canvas.off(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
     }
 
     private getCursorPosition(e: IEvent) {

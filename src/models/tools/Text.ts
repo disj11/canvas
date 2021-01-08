@@ -5,6 +5,22 @@ export enum FontFaceType {
     GOOGLE,
 }
 
+export const TextAlign = {
+    LEFT: "left",
+    CENTER: "center",
+    RIGHT: "right",
+}
+
+export const FontWeight = {
+    NORMAL: "normal",
+    BOLD: "bold",
+}
+
+export const FontStyle = {
+    NORMAL: "normal",
+    ITALIC: "italic",
+}
+
 export class FontFaces {
     private static readonly _values: FontFaces[] = [];
     public static readonly TIMES_NEW_ROMAN = new FontFaces("Times New Roman", "Times New Roman", FontFaceType.DEFAULT);

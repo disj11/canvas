@@ -4,34 +4,44 @@ import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Button } from '@material-ui/core';
+import clsx from 'clsx';
+import { TextAlign } from 'models/tools/Text';
+import { CommonColor } from 'models/color/CommonColor';
 
 const useStyles = makeStyles((theme) => ({
     alignBox: {
         display: "flex",
+        border: 2,
+        borderStyle: "solid",
+        borderColor: "#ddd",
     },
     alignButton: {
         flex: 1,
+        borderRadius: 0,
+    },
+    selected: {
+        background: CommonColor.BACKGROUND_GRADIENT,
+        color: "#ffffff",
     }
 }));
 
 interface Props {
-    onLeft?: () => void,
-    onCenter?: () => void,
-    onRight?: () => void,
+    textAlign: string,
+    onChange: (textAlign: string) => void,
 }
 
-const AlignButton = ({onLeft, onCenter, onRight}: Props) => {
+const AlignButton = ({textAlign, onChange}: Props) => {
     const classes = useStyles();
     
     return (
         <div className={classes.alignBox}>
-            <Button className={classes.alignButton} onClick={onLeft}>
+            <Button className={clsx(classes.alignButton, textAlign === TextAlign.LEFT && classes.selected)} onClick={() => onChange(TextAlign.LEFT)}>
                 <FormatAlignLeftIcon/>
             </Button>
-            <Button className={classes.alignButton} onClick={onCenter}>
+            <Button className={clsx(classes.alignButton, textAlign === TextAlign.CENTER && classes.selected)} onClick={() => onChange(TextAlign.CENTER)}>
                 <FormatAlignCenterIcon/>
             </Button>
-            <Button className={classes.alignButton} onClick={onRight}>
+            <Button className={clsx(classes.alignButton, textAlign === TextAlign.RIGHT && classes.selected)} onClick={() => onChange(TextAlign.RIGHT)}>
                 <FormatAlignRightIcon/>
             </Button>
         </div>

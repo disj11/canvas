@@ -48,10 +48,7 @@ export class ObjectManagerStore {
         this.canvasStore.canvas.on(SelectionEventType.SELECTION_CLEARED, this.listeners.onCleared);
         reaction(
             () => this.activeObject,
-            () => {
-                console.log(this.activeObject);
-                this.observer.forEach(callback => callback(this.activeObject));
-            },
+            () => this.observer.forEach(callback => callback(this.activeObject)),
         );
     }
 

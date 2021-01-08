@@ -1,8 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { BrushType } from "models/tools/Brush";
-import { RootStore } from "./rootStore";
+import { RootStore, Store } from "./rootStore";
 import { fabric } from "fabric";
 import { ObjectManagerStore } from "./objectManagerStore";
+import { CanvasModeManager } from "./canvasStore";
+import { ToolTypes } from "models/tools/ToolTypes";
 
 const defaultStyles = {
     brushType: BrushType.PENCIL,
@@ -15,12 +17,13 @@ interface PathStyles {
     strokeWidth: number | undefined,
 }
 
-export class BrushStore {
+export class BrushStore implements Store, CanvasModeManager {
     brushType = defaultStyles.brushType;
     stroke = defaultStyles.stroke;
     strokeWidth = defaultStyles.strokeWidth;
     item: fabric.Path | undefined;
 
+    private readonly listeners: any;
     private readonly canvas: fabric.Canvas;
     private readonly objectManager: ObjectManagerStore;
 
@@ -28,9 +31,30 @@ export class BrushStore {
         private readonly rootStore: RootStore,
     ) {
         makeAutoObservable(this);
+        rootStore.canvasStore.registerCanvasModeManager(ToolTypes.BRUSH, this);
         this.canvas = rootStore.canvasStore.canvas;
         this.objectManager = rootStore.objectManagerStore;
+        this.listeners = {
+            updateObject: this.updateObject.bind(this),
+        }
+    }
+
+    onInit() {
         this.addReactions();
+    }
+
+    onDestory() {
+        this.removeReactions();
+    }
+
+    onSessionStart() {
+        this.canvas.isDrawingMode = true;
+        this.setBrushType(this.brushType);
+    }
+
+    onSessionEnd() {
+        this.removeReactions();
+        this.canvas.isDrawingMode = false;
     }
 
     setBrushType(brushType: BrushType) {
@@ -56,10 +80,6 @@ export class BrushStore {
         this.canvas.freeDrawingBrush = this.rootStore.brushStore.brushType.getBrush(this.canvas);
         this.canvas.freeDrawingBrush.color = this.stroke;
         this.canvas.freeDrawingBrush.width = this.strokeWidth;
-    }
-
-    private addReactions() {
-        this.objectManager.subscribe(this.updateObject.bind(this));
     }
 
     private updateObject(object: fabric.Object | undefined) {
@@ -94,5 +114,13 @@ export class BrushStore {
 
     private isBrush(object: fabric.Object | undefined) {
         return object?.isType("path");
+    }
+
+    private addReactions() {
+        this.objectManager.subscribe(this.listeners.updateObject);
+    }
+
+    private removeReactions() {
+        this.objectManager.unsubscribe(this.listeners.updateObject);
     }
 }

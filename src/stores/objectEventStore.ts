@@ -1,22 +1,40 @@
 import { IEvent } from "fabric/fabric-impl";
-import { RootStore } from "./rootStore";
+import { RootStore, Store } from "./rootStore";
 
 export enum ObjectEventType {
     OBJECT_SCALING = "object:scaling",
     OBJECT_MODIFIED = "object:modified",
 }
 
-export class ObjectEventStore {
-    private observer: Map<ObjectEventType, Set<(e: IEvent) => void>> = new Map();
+export class ObjectEventStore implements Store {
+    private readonly listeners: any;
+    private readonly observer: Map<ObjectEventType, Set<(e: IEvent) => void>> = new Map();
 
     constructor(private readonly rootStore: RootStore) {
+        this.listeners = {
+            onScaling: this.onScaling.bind(this),
+            onModified: this.onModified.bind(this),
+        }
+    }
+
+    onInit() {
         this.addEventListener();
+    }
+
+    onDestory() {
+        this.removeEventListener();
     }
 
     private addEventListener() {
         const {canvas} = this.rootStore.canvasStore;
-        canvas.on(ObjectEventType.OBJECT_SCALING, this.onScaling.bind(this));
-        canvas.on(ObjectEventType.OBJECT_MODIFIED, this.onModified.bind(this));
+        canvas.on(ObjectEventType.OBJECT_SCALING, this.listeners.onScaling);
+        canvas.on(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
+    }
+
+    private removeEventListener() {
+        const {canvas} = this.rootStore.canvasStore;
+        canvas.off(ObjectEventType.OBJECT_SCALING, this.listeners.onScaling);
+        canvas.off(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
     }
 
     private onScaling(e: IEvent) {

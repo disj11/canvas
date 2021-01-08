@@ -73,7 +73,7 @@ const ToolBox = observer(() => {
                     <ToolButton
                         icon={<PhotoSizeSelectSmallIcon/>}
                         text={ToolTypes.CANVAS.display}
-                        onClick={() => canvasStore.canvasMode = ToolTypes.CANVAS}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.CANVAS)}
                         selected={canvasStore.canvasMode === ToolTypes.CANVAS}
                     />
                 </div>

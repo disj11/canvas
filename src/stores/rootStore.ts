@@ -7,8 +7,14 @@ import { ObjectEventStore } from "./objectEventStore";
 import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
 import { TextStore } from "./textStore";
+import { SelectStore } from "./selectStore";
 
-export class RootStore {
+export interface Store {
+    onInit: () => void;
+    onDestory: () => void;
+}
+
+export class RootStore implements Store {
     private readonly canvasElement: HTMLCanvasElement;
     canvasStore: CanvasStore;
     objectManagerStore: ObjectManagerStore;
@@ -17,6 +23,7 @@ export class RootStore {
     brushStore: BrushStore;
     shapeStore: ShapeStore;
     textStore: TextStore;
+    selectStore: SelectStore;
     UIStore: UIStore;
 
     constructor() {
@@ -30,12 +37,29 @@ export class RootStore {
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);
         this.textStore = new TextStore(this);
+        this.selectStore = new SelectStore(this);
         this.UIStore = new UIStore(this);
+    }
+
+    onInit() {
+        //
+    }
+
+    onDestory() {
+        Object.values(this).forEach(obj => {
+            if (obj.onDestory) {
+                obj.onDestory();
+            }
+        })
     }
 
     init(container: HTMLElement): void {
         container.append(this.canvasElement.parentElement as Node);
-        this.canvasStore.init();
+        Object.values(this).forEach(obj => {
+            if (obj.onInit) {
+                obj.onInit();
+            }
+        })
     }
 }
 

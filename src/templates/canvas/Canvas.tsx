@@ -46,8 +46,8 @@ const Canvas = observer(() => {
         }
 
         rootStore.init(canvasRef.current);
-        // eslint-disable-next-line
-    }, [canvasRef]);
+        return () => rootStore.onDestory();
+    }, [rootStore, canvasRef]);
 
     return (
         <Layout>
