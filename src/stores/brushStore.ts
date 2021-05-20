@@ -43,7 +43,7 @@ export class BrushStore implements Store, CanvasModeManager {
         this.addReactions();
     }
 
-    onDestory() {
+    onDestroy() {
         this.removeReactions();
     }
 
@@ -53,7 +53,6 @@ export class BrushStore implements Store, CanvasModeManager {
     }
 
     onSessionEnd() {
-        this.removeReactions();
         this.canvas.isDrawingMode = false;
     }
 

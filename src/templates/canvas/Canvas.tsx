@@ -46,7 +46,7 @@ const Canvas = observer(() => {
         }
 
         rootStore.init(canvasRef.current);
-        return () => rootStore.onDestory();
+        return () => rootStore.onDestroy();
     }, [rootStore, canvasRef]);
 
     return (

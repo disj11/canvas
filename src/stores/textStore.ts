@@ -67,7 +67,7 @@ export class TextStore implements Store, CanvasModeManager {
         this.addFontAutoRender();
     }
 
-    onDestory() {
+    onDestroy() {
         this.removeEventListener();
         this.removeFontAutoRender();
     }

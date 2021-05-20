@@ -52,7 +52,7 @@ export class ShapeStore implements Store, CanvasModeManager {
         this.addReactions();
     }
 
-    onDestory() {
+    onDestroy() {
         this.removeEventListener();
         this.removeReactions();
     }

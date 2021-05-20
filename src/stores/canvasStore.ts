@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { ToolTypes } from "models/tools/ToolTypes";
 import { RootStore, Store } from "./rootStore";
+import {fabric} from "fabric";
 
 const defaultStyles = {
     width: 500,
@@ -35,7 +36,7 @@ export class CanvasStore implements Store {
         this.setCanvasMode(this.canvasMode);
     }
 
-    onDestory() {
+    onDestroy() {
         this.canvas.dispose();
     }
 

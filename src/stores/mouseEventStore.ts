@@ -31,7 +31,7 @@ export class MouseEventStore implements Store {
         this.addEventListeners();
     }
 
-    onDestory() {
+    onDestroy() {
         this.removeEventListeners();
     }
 
@@ -54,7 +54,7 @@ export class MouseEventStore implements Store {
         this.observer.get(MouseEventType.MOUSE_DOWN)?.forEach(callback => callback({
             startCursorPosition: this.startCursorPosition,
             currentCursorPosition: this.currentCursorPosition,    
-        }))
+        }));
     }
 
     private onMouseMove(e: IEvent) {
@@ -63,7 +63,7 @@ export class MouseEventStore implements Store {
         this.observer.get(MouseEventType.MOUSE_MOVE)?.forEach(callback => callback({
             startCursorPosition: this.startCursorPosition,
             currentCursorPosition: this.currentCursorPosition,    
-        }))
+        }));
     }
 
     private onMouseUp(e: IEvent) {
@@ -72,7 +72,7 @@ export class MouseEventStore implements Store {
         this.observer.get(MouseEventType.MOUSE_UP)?.forEach(callback => callback({
             startCursorPosition: this.startCursorPosition,
             currentCursorPosition: this.currentCursorPosition,    
-        }))
+        }));
     }
 
     private addEventListeners() {

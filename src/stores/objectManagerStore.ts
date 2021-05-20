@@ -3,6 +3,7 @@ import { makeAutoObservable, reaction } from "mobx";
 import { ShapeType } from "models/tools/Shape";
 import { CanvasStore } from "./canvasStore";
 import { RootStore } from "./rootStore";
+import {fabric} from "fabric";
 
 export enum SelectionEventType {
     SELECTION_CLEARED = "selection:cleared",
@@ -57,6 +58,7 @@ export class ObjectManagerStore {
     }
 
     unsubscribe(listener: (object: fabric.Object | undefined) => void) {
+        console.trace('unsubscribe');
         this.observer.delete(listener);
     }
 

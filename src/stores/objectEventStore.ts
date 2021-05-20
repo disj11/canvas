@@ -21,7 +21,7 @@ export class ObjectEventStore implements Store {
         this.addEventListener();
     }
 
-    onDestory() {
+    onDestroy() {
         this.removeEventListener();
     }
 

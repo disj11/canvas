@@ -11,7 +11,7 @@ import { SelectStore } from "./selectStore";
 
 export interface Store {
     onInit: () => void;
-    onDestory: () => void;
+    onDestroy: () => void;
 }
 
 export class RootStore implements Store {
@@ -45,12 +45,12 @@ export class RootStore implements Store {
         //
     }
 
-    onDestory() {
+    onDestroy() {
         Object.values(this).forEach(obj => {
             if (obj.onDestory) {
                 obj.onDestory();
             }
-        })
+        });
     }
 
     init(container: HTMLElement): void {
@@ -59,7 +59,7 @@ export class RootStore implements Store {
             if (obj.onInit) {
                 obj.onInit();
             }
-        })
+        });
     }
 }
 
