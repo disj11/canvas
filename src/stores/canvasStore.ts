@@ -1,6 +1,6 @@
-import { makeAutoObservable } from "mobx";
-import { ToolTypes } from "models/tools/ToolTypes";
-import { RootStore, Store } from "./rootStore";
+import {makeAutoObservable} from "mobx";
+import {ToolTypes} from "models/tools/ToolTypes";
+import {RootStore, Store} from "./rootStore";
 import {fabric} from "fabric";
 
 const defaultStyles = {
@@ -20,7 +20,7 @@ export class CanvasStore implements Store {
     width = defaultStyles.width;
     height = defaultStyles.height;
     backgroundColor = defaultStyles.backgroundColor;
-    canvasMode = ToolTypes.BRUSH;
+    canvasMode = ToolTypes.CANVAS;
 
     constructor(
         private readonly rootStore: RootStore,
@@ -32,7 +32,8 @@ export class CanvasStore implements Store {
     onInit() {
         this.canvas.setWidth(this.width);
         this.canvas.setHeight(this.height);
-        this.canvas.setBackgroundColor(this.backgroundColor, () => {});
+        this.canvas.setBackgroundColor(this.backgroundColor, () => {
+        });
         this.setCanvasMode(this.canvasMode);
     }
 
@@ -76,5 +77,21 @@ export class CanvasStore implements Store {
     setAllCursor(cursor: string) {
         this.setDefaultCursor(cursor);
         this.setHoverCursor(cursor);
+    }
+
+    setWidth(width: number) {
+        this.width = width;
+        this.canvas.setWidth(width);
+    }
+
+    setHeight(height: number) {
+        this.height = height;
+        this.canvas.setHeight(height);
+    }
+
+    setBackgroundColor(color: string) {
+        this.backgroundColor = color;
+        this.canvas.setBackgroundColor(color, () => {
+        });
     }
 }

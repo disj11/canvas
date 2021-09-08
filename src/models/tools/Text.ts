@@ -24,8 +24,10 @@ export const FontStyle = {
 export class FontFaces {
     private static readonly _values: FontFaces[] = [];
     public static readonly TIMES_NEW_ROMAN = new FontFaces("Times New Roman", "Times New Roman", FontFaceType.DEFAULT);
-    public static readonly NOTO_SANS_KR = new FontFaces("Noto Sans KR", "Noto Sans KR", FontFaceType.GOOGLE);
-    public static readonly EAST_SEA_DOKDO = new FontFaces("East Sea Dokdo", "East Sea Dokdo", FontFaceType.GOOGLE);
+    public static readonly NOTO_SANS_KR = new FontFaces("Noto Sans KR", "노토산스", FontFaceType.GOOGLE);
+    public static readonly NANUM_GOTHIC = new FontFaces("Nanum Gothic", "나눔고딕", FontFaceType.GOOGLE);
+    public static readonly NANUM_PEN_SCRIPT = new FontFaces("Nanum Pen Script", "나눔펜", FontFaceType.GOOGLE);
+    public static readonly SONG_MYUNG = new FontFaces("Song Myung", "송명", FontFaceType.GOOGLE);
 
     constructor(
         public readonly value: string,

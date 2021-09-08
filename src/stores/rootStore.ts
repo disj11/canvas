@@ -8,6 +8,7 @@ import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
 import { TextStore } from "./textStore";
 import { SelectStore } from "./selectStore";
+import {CommonAction} from "../utils/CommonAction";
 
 export interface Store {
     onInit: () => void;
@@ -54,7 +55,8 @@ export class RootStore implements Store {
     }
 
     init(container: HTMLElement): void {
-        container.append(this.canvasElement.parentElement as Node);
+        container.append(this.canvasElement.parentElement!);
+        CommonAction.init();
         Object.values(this).forEach(obj => {
             if (obj.onInit) {
                 obj.onInit();

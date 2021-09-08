@@ -6,6 +6,8 @@ import { ToolTypes } from "../../models/tools/ToolTypes";
 import BrushPropBox from "./BrushPropBox";
 import ShapePropBox from "./ShapePropBox";
 import TextPropBox from "./TextPropBox";
+import CanvasPropBox from "./CanvasPropBox";
+import SelectPropBox from "./SelectPropBox";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,9 +26,11 @@ const PropBox = observer(() => {
         <React.Fragment>
             <div className={classes.root}>
                 {!activeObject && <React.Fragment>
+                    {selectedTool === ToolTypes.SELECT && (<SelectPropBox />)}
                     {selectedTool === ToolTypes.BRUSH && (<BrushPropBox />)}
                     {selectedTool === ToolTypes.SHAPE && (<ShapePropBox />)}
                     {selectedTool === ToolTypes.TEXT && (<TextPropBox />)}
+                    {selectedTool === ToolTypes.CANVAS && (<CanvasPropBox />)}
                 </React.Fragment>}
                 {activeObject && <React.Fragment>
                     {objectManagerStore.isPath() && <BrushPropBox />}

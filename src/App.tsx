@@ -1,7 +1,11 @@
 import {Canvas} from 'templates/canvas';
 import React from 'react';
 
-function App() {
+const App = () => {
+    React.useEffect(() => {
+        document.title = "캔버스";
+    }, []);
+
     return (
         <Canvas/>
     );

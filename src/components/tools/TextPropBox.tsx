@@ -25,7 +25,7 @@ const TextPropBox = observer(() => {
         textStore.setFontSize(fontSize);
     };
 
-    const handleFontFmailyChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleFontFamilyChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         const fontFamily = event.target.value as string;
         textStore.setFontFamily(fontFamily);
     };
@@ -37,10 +37,18 @@ const TextPropBox = observer(() => {
                     <FormControl fullWidth>
                         <Select
                             value={textStore.fontFamily}
-                            onChange={handleFontFmailyChange}
+                            onChange={handleFontFamilyChange}
                         >
                             {FontFaces.values().map(font => (
-                                <MenuItem key={font.value} value={font.value}>{font.display}</MenuItem>
+                                <MenuItem
+                                    key={font.value}
+                                    value={font.value}
+                                    style={{
+                                        fontFamily: font.value,
+                                    }}
+                                >
+                                    {font.display}
+                                </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
