@@ -1,6 +1,6 @@
-import { Popover, Typography } from "@material-ui/core";
+import {Popover, Typography} from "@material-ui/core";
 import React from "react";
-import { ChromePicker, ColorResult } from "react-color"
+import {ChromePicker, ColorResult} from "react-color"
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
     onChange: (color: ColorResult) => void;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     colorBox: {
         width: "100%",
         height: 35,
@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ColorPicker = (props: Props) => {
     const classes = useStyles(props);
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
     const open = !!anchorEl;
 
-    const handleClick = (e: any) => {
-        setAnchorEl(e.currentTarget);
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
@@ -40,13 +40,14 @@ const ColorPicker = (props: Props) => {
         <div>
             {props.label && <Typography variant={"caption"}>{props.label}</Typography>}
             <div>
-                <div className={classes.colorBox} onClick={handleClick} />
+                <div className={classes.colorBox} onClick={handleClick}/>
                 <Popover
                     open={open && !props.disabled}
                     anchorEl={anchorEl}
                     onClose={handleClose}
                 >
-                    <ChromePicker color={props.color} disableAlpha={props.disableAlpha} onChangeComplete={props.onChange} />
+                    <ChromePicker color={props.color} disableAlpha={props.disableAlpha}
+                                  onChangeComplete={props.onChange}/>
                 </Popover>
             </div>
         </div>

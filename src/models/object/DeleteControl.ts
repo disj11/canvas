@@ -1,30 +1,19 @@
-import {Transform} from "fabric/fabric-impl";
 import {fabric} from "fabric";
-import {DeleteImageElement} from "../components/element/DeleteImageElement";
+import {DeleteImageElement} from "../../components/element/DeleteImageElement";
 
-export class CommonAction {
-    public static init() {
+type DeleteAction = (eventData: MouseEvent, transformData: fabric.Transform, x: number, y: number) => boolean;
+
+export class DeleteControl {
+    public static init(deleteAction: DeleteAction) {
         fabric.Object.prototype.controls.deleteControl = new fabric.Control({
             x: 0.5,
             y: -0.5,
             offsetY: -16,
             offsetX: 16,
             cursorStyle: 'pointer',
-            mouseUpHandler: this.deleteObject,
+            mouseUpHandler: deleteAction,
             render: this.renderIcon(DeleteImageElement),
         })
-    }
-
-    private static deleteObject(_eventData: MouseEvent, transform: Transform) {
-        const target = transform.target;
-        const canvas = target.canvas;
-        if (!canvas) {
-            return false;
-        }
-
-        canvas.remove(target);
-        canvas.requestRenderAll();
-        return true;
     }
 
     private static renderIcon(icon: CanvasImageSource) {

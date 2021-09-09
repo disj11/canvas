@@ -1,9 +1,10 @@
-import { IEvent } from "fabric/fabric-impl";
+import {IEvent, Transform} from "fabric/fabric-impl";
 import { makeAutoObservable, reaction } from "mobx";
 import { ShapeType } from "models/tools/Shape";
 import { CanvasStore } from "./canvasStore";
 import { RootStore } from "./rootStore";
 import {fabric} from "fabric";
+import {DeleteControl} from "../models/object/DeleteControl";
 
 export enum SelectionEventType {
     SELECTION_CLEARED = "selection:cleared",
@@ -28,6 +29,7 @@ export class ObjectManagerStore {
             onCleared: this.onCleared.bind(this),
         }
         this.addEventListeners();
+        this.initControl();
     }
 
     private onSelected(e: IEvent) {
@@ -53,12 +55,32 @@ export class ObjectManagerStore {
         );
     }
 
+    private initControl() {
+        DeleteControl.init(this.removeActiveObjects);
+    }
+
+    private removeActiveObjects(_eventData: MouseEvent, transform: Transform): boolean {
+        const canvas = transform.target.canvas;
+        if (!canvas) {
+            return false;
+        }
+
+        const activeObjects = canvas.getActiveObjects();
+        if (activeObjects.length === 0) {
+            return false;
+        }
+
+        canvas.getActiveObjects().forEach(object => canvas.remove(object));
+        canvas.discardActiveObject();
+        canvas.requestRenderAll();
+        return true;
+    }
+
     subscribe(listener: (object: fabric.Object | undefined) => void) {
         this.observer.add(listener);
     }
 
     unsubscribe(listener: (object: fabric.Object | undefined) => void) {
-        console.trace('unsubscribe');
         this.observer.delete(listener);
     }
 
@@ -86,6 +108,18 @@ export class ObjectManagerStore {
         return this.activeObject?.isType("i-text");
     }
 
+    isActiveSelection() {
+        return this.activeObject?.isType("activeSelection");
+    }
+
+    isGroup() {
+        return this.activeObject?.isType("group");
+    }
+
+    isCommonObject() {
+        return !this.isShape() && !this.isPath() && !this.isText();
+    }
+
     getObjectTypeName(): string {
         if (this.isRect()) {
             return ShapeType.RECT.display;
@@ -97,6 +131,8 @@ export class ObjectManagerStore {
             return "패스";
         } else if (this.isText()) {
             return "텍스트";
+        } else if (this.isGroup()) {
+            return "그룹"
         } else {
             return "오브젝트";
         }

@@ -76,7 +76,7 @@ export class BrushStore implements Store, CanvasModeManager {
     }
 
     private setFreeDrawingBrush() {
-        this.canvas.freeDrawingBrush = this.rootStore.brushStore.brushType.getBrush(this.canvas);
+        this.canvas.freeDrawingBrush = this.brushType.getBrush(this.canvas);
         this.canvas.freeDrawingBrush.color = this.stroke;
         this.canvas.freeDrawingBrush.width = this.strokeWidth;
     }

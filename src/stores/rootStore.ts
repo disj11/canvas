@@ -8,7 +8,6 @@ import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
 import { TextStore } from "./textStore";
 import { SelectStore } from "./selectStore";
-import {CommonAction} from "../utils/CommonAction";
 
 export interface Store {
     onInit: () => void;
@@ -21,6 +20,7 @@ export class RootStore implements Store {
     objectManagerStore: ObjectManagerStore;
     objectEventStore: ObjectEventStore;
     mouseEventStore: MouseEventStore;
+
     brushStore: BrushStore;
     shapeStore: ShapeStore;
     textStore: TextStore;
@@ -35,6 +35,7 @@ export class RootStore implements Store {
         this.objectManagerStore = new ObjectManagerStore(this);
         this.objectEventStore = new ObjectEventStore(this);
         this.mouseEventStore = new MouseEventStore(this);
+
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);
         this.textStore = new TextStore(this);
@@ -43,7 +44,11 @@ export class RootStore implements Store {
     }
 
     onInit() {
-        //
+        Object.values(this).forEach(obj => {
+            if (obj.onInit) {
+                obj.onInit();
+            }
+        });
     }
 
     onDestroy() {
@@ -56,12 +61,6 @@ export class RootStore implements Store {
 
     init(container: HTMLElement): void {
         container.append(this.canvasElement.parentElement!);
-        CommonAction.init();
-        Object.values(this).forEach(obj => {
-            if (obj.onInit) {
-                obj.onInit();
-            }
-        });
     }
 }
 

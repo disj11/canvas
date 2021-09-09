@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import { Box, FormControl, Select } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 import { FontFaces, fontSizes } from "models/tools/Text";
+import PropBoxItem from "./PropBoxItem";
 
 const useStyles = makeStyles(theme => ({
     propBox: {
@@ -33,7 +34,7 @@ const TextPropBox = observer(() => {
     return (
         <PropBoxLayout>
             <div className={classes.propBox}>
-                <div>
+                <PropBoxItem label={"폰트"}>
                     <FormControl fullWidth>
                         <Select
                             value={textStore.fontFamily}
@@ -52,8 +53,8 @@ const TextPropBox = observer(() => {
                             ))}
                         </Select>
                     </FormControl>
-                </div>
-                <div>
+                </PropBoxItem>
+                <PropBoxItem label={"폰트 크기"}>
                     <Box display={"flex"}>
                         <Box flex={1} mr={1.5}>
                             <FormControl fullWidth>
@@ -72,8 +73,8 @@ const TextPropBox = observer(() => {
                             <ColorPicker color={textStore.fill} onChange={(color) => textStore.setFill(color.hex)} />
                         </Box>
                     </Box>
-                </div>
-                <div>
+                </PropBoxItem>
+                <PropBoxItem label={"폰트 스타일"}>
                     <TextStyleButton
                         bold={textStore.isBold()}
                         italic={textStore.isItalic()}
@@ -82,10 +83,10 @@ const TextPropBox = observer(() => {
                         toggleItalic={(italic) => textStore.setItalic(italic)}
                         toggleUnderline={(underline) => textStore.setUnderline(underline)}
                     />
-                </div>
-                <div>
+                </PropBoxItem>
+                <PropBoxItem label={"정렬"}>
                     <AlignButton textAlign={textStore.textAlign} onChange={(textAlign) => textStore.setTextAlign(textAlign)} />
-                </div>
+                </PropBoxItem>
             </div>
         </PropBoxLayout>
     )

@@ -1,9 +1,10 @@
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 import PropBoxLayout from "./PropBoxLayout";
-import {Box, FormControl, Input, InputAdornment, InputLabel, Typography} from "@material-ui/core";
+import {Box, FormControl, Input, InputAdornment, InputLabel} from "@material-ui/core";
 import React from "react";
 import {ColorPalette} from "../input";
+import PropBoxItem from "./PropBoxItem";
 
 const CanvasPropBox = observer(() => {
     const {canvasStore} = useStores();
@@ -12,10 +13,7 @@ const CanvasPropBox = observer(() => {
 
     return (
         <PropBoxLayout>
-            <Box mb={3}>
-                <Box mb={1}>
-                    <Typography variant={"caption"}>캔버스 크기 조정</Typography>
-                </Box>
+            <PropBoxItem label={"캔버스 크기 조정"} mb={3}>
                 <Box display={"flex"}>
                     <Box flex={1} mr={1.5}>
                         <FormControl fullWidth>
@@ -44,17 +42,14 @@ const CanvasPropBox = observer(() => {
                         </FormControl>
                     </Box>
                 </Box>
-            </Box>
-            <Box>
-                <Box mb={1}>
-                    <Typography variant={"caption"}>배경</Typography>
-                </Box>
+            </PropBoxItem>
+            <PropBoxItem label={"배경"}>
                 <ColorPalette
                     color={canvasStore.backgroundColor}
                     onChange={(event) => canvasStore.setBackgroundColor(event.hex)}
                     disableAlpha={true}
                 />
-            </Box>
+            </PropBoxItem>
         </PropBoxLayout>
     )
 })

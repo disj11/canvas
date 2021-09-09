@@ -5,6 +5,7 @@ import { CanvasModeManager } from "./canvasStore";
 import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
 import { ObjectManagerStore } from "./objectManagerStore";
 import { RootStore, Store } from "./rootStore";
+import {fabric} from "fabric";
 
 const defaultStyles = {
     shapeType: ShapeType.ELLIPSE,

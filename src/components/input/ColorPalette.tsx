@@ -4,7 +4,7 @@ import { ColorResult, TwitterPicker } from "react-color"
 import ColorPicker from "./ColorPicker";
 
 interface Props {
-    color: string,
+    color: string | undefined,
     disableAlpha?: boolean,
     onChange: (color: ColorResult) => void;
 }

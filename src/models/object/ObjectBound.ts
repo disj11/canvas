@@ -1,3 +1,5 @@
+import {fabric} from "fabric";
+
 export class ObjectBound {
     public readonly top: number;
     public readonly left: number;
@@ -13,6 +15,5 @@ export class ObjectBound {
         this.height = Math.ceil((object.height || 0) * (object.scaleY || 0));
         this.right = this.left + this.width;
         this.bottom = this.top + this.height;
-        
     }
 }

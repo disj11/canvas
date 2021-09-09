@@ -1,10 +1,11 @@
 import React from "react";
 import {Layout} from "../layout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {PropBox, ToolBox} from "../../components/tools";
+import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
 import {Toolbar} from "@material-ui/core";
 import {useStores} from "../../hooks/useStores";
+import {PropBox} from "../../components/propbox";
 
 const leftMenuWidth = 260;
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +47,7 @@ const Canvas = observer(() => {
         }
 
         rootStore.init(canvasRef.current);
+        rootStore.onInit();
         return () => rootStore.onDestroy();
     }, [rootStore, canvasRef]);
 
