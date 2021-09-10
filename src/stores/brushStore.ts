@@ -2,9 +2,10 @@ import { makeAutoObservable } from "mobx";
 import { BrushType } from "models/tools/Brush";
 import { RootStore, Store } from "./rootStore";
 import { fabric } from "fabric";
-import { ObjectManagerStore } from "./objectManagerStore";
+import { SelectionEventStore } from "./selectionEventStore";
 import { CanvasModeManager } from "./canvasStore";
 import { ToolTypes } from "models/tools/ToolTypes";
+import {ObjectStore} from "./objectStore";
 
 const defaultStyles = {
     brushType: BrushType.PENCIL,
@@ -12,20 +13,16 @@ const defaultStyles = {
     strokeWidth: 1,
 }
 
-interface PathStyles {
-    stroke: string | undefined,
-    strokeWidth: number | undefined,
-}
-
 export class BrushStore implements Store, CanvasModeManager {
-    brushType = defaultStyles.brushType;
-    stroke = defaultStyles.stroke;
-    strokeWidth = defaultStyles.strokeWidth;
-    item: fabric.Path | undefined;
+    public brushType = defaultStyles.brushType;
+    public stroke = defaultStyles.stroke;
+    public strokeWidth = defaultStyles.strokeWidth;
+    public item: fabric.Path | undefined;
 
     private readonly listeners: any;
     private readonly canvas: fabric.Canvas;
-    private readonly objectManager: ObjectManagerStore;
+    private readonly selectionEventStore: SelectionEventStore;
+    private readonly objectStore: ObjectStore;
 
     constructor(
         private readonly rootStore: RootStore,
@@ -33,7 +30,8 @@ export class BrushStore implements Store, CanvasModeManager {
         makeAutoObservable(this);
         rootStore.canvasStore.registerCanvasModeManager(ToolTypes.BRUSH, this);
         this.canvas = rootStore.canvasStore.canvas;
-        this.objectManager = rootStore.objectManagerStore;
+        this.selectionEventStore = rootStore.selectionEventStore;
+        this.objectStore = rootStore.objectStore;
         this.listeners = {
             updateObject: this.updateObject.bind(this),
         }
@@ -61,18 +59,24 @@ export class BrushStore implements Store, CanvasModeManager {
         this.setFreeDrawingBrush();
     }
 
-    setStroke(stroke: string | undefined) {
+    updateStroke(stroke: string | undefined) {
         this.stroke = stroke || defaultStyles.stroke;
-        this.item?.set("stroke", stroke);
         this.canvas.freeDrawingBrush.color = this.stroke;
-        this.canvas.renderAll();
+    }
+
+    setStroke(stroke: string | undefined) {
+        this.updateStroke(stroke);
+        this.objectStore.setStroke(stroke);
+    }
+
+    updateStrokeWidth(strokeWidth: number | undefined) {
+        this.strokeWidth = strokeWidth || defaultStyles.strokeWidth;
+        this.canvas.freeDrawingBrush.width = this.strokeWidth;
     }
 
     setStrokeWidth(strokeWidth: number | undefined) {
-        this.strokeWidth = strokeWidth || defaultStyles.strokeWidth;
-        this.item?.set("strokeWidth", strokeWidth);
-        this.canvas.freeDrawingBrush.width = this.strokeWidth;
-        this.canvas.renderAll();
+        this.updateStrokeWidth(strokeWidth);
+        this.objectStore.setStrokeWidth(strokeWidth);
     }
 
     private setFreeDrawingBrush() {
@@ -90,11 +94,6 @@ export class BrushStore implements Store, CanvasModeManager {
         }
     }
 
-    private setPathStyles(styles: PathStyles) {
-        this.setStroke(styles.stroke);
-        this.setStrokeWidth(styles.strokeWidth);
-    }
-
     private updatePathStyles() {
         if (!this.item) {
             return;
@@ -105,21 +104,19 @@ export class BrushStore implements Store, CanvasModeManager {
             strokeWidth,
         } = this.item;
 
-        this.setPathStyles({
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-        })
+        this.updateStroke(stroke);
+        this.updateStrokeWidth(strokeWidth);
     }
 
     private isBrush(object: fabric.Object | undefined) {
-        return object?.isType("path");
+        return this.objectStore.isPath(object);
     }
 
     private addReactions() {
-        this.objectManager.subscribe(this.listeners.updateObject);
+        this.selectionEventStore.subscribe(this.listeners.updateObject);
     }
 
     private removeReactions() {
-        this.objectManager.unsubscribe(this.listeners.updateObject);
+        this.selectionEventStore.unsubscribe(this.listeners.updateObject);
     }
 }

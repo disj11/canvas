@@ -1,6 +1,5 @@
 import {IEvent, Transform} from "fabric/fabric-impl";
 import { makeAutoObservable, reaction } from "mobx";
-import { ShapeType } from "models/tools/Shape";
 import { CanvasStore } from "./canvasStore";
 import { RootStore } from "./rootStore";
 import {fabric} from "fabric";
@@ -12,7 +11,7 @@ export enum SelectionEventType {
     SELECTION_UPDATED = "selection:updated",
 }
 
-export class ObjectManagerStore {
+export class SelectionEventStore {
     private readonly canvasStore: CanvasStore;
     private readonly listeners: { [eventName: string]: (e: IEvent) => void }
     private readonly observer: Set<(object: fabric.Object | undefined) => void> = new Set();
@@ -82,59 +81,5 @@ export class ObjectManagerStore {
 
     unsubscribe(listener: (object: fabric.Object | undefined) => void) {
         this.observer.delete(listener);
-    }
-
-    isRect() {
-        return this.activeObject?.isType(ShapeType.RECT.value);
-    }
-
-    isEllipse() {
-        return this.activeObject?.isType(ShapeType.ELLIPSE.value);
-    }
-
-    isTriangle() {
-        return this.activeObject?.isType(ShapeType.TRIANGLE.value);
-    }
-
-    isShape() {
-        return this.isRect() || this.isEllipse() || this.isTriangle();
-    }
-
-    isPath() {
-        return this.activeObject?.isType("path");
-    }
-
-    isText() {
-        return this.activeObject?.isType("i-text");
-    }
-
-    isActiveSelection() {
-        return this.activeObject?.isType("activeSelection");
-    }
-
-    isGroup() {
-        return this.activeObject?.isType("group");
-    }
-
-    isCommonObject() {
-        return !this.isShape() && !this.isPath() && !this.isText();
-    }
-
-    getObjectTypeName(): string {
-        if (this.isRect()) {
-            return ShapeType.RECT.display;
-        } else if (this.isEllipse()) {
-            return ShapeType.ELLIPSE.display;
-        } else if (this.isTriangle()) {
-            return ShapeType.TRIANGLE.display;
-        } else if (this.isPath()) {
-            return "패스";
-        } else if (this.isText()) {
-            return "텍스트";
-        } else if (this.isGroup()) {
-            return "그룹"
-        } else {
-            return "오브젝트";
-        }
     }
 }

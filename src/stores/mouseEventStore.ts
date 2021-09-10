@@ -19,7 +19,6 @@ export class MouseEventStore implements Store {
     private observer: Map<MouseEventType, Array<(e: MouseEventObject) => void>> = new Map();
 
     constructor(private readonly rootStore: RootStore) {
-        // this.addEventListeners();
         this.listeners = {
             onMouseDown: this.onMouseDown.bind(this),
             onMouseUp: this.onMouseUp.bind(this),

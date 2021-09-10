@@ -16,7 +16,7 @@ export const FontWeight = {
     BOLD: "bold",
 }
 
-export const FontStyle = {
+export const FontStyle: Record<string, "normal" | "italic"> = {
     NORMAL: "normal",
     ITALIC: "italic",
 }

@@ -1,14 +1,15 @@
-import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
-import { RootStore, Store } from "./rootStore";
-import { fabric } from "fabric";
-import { ToolTypes } from "models/tools/ToolTypes";
-import { ObjectEventStore, ObjectEventType } from "./objectEventStore";
-import { IEvent } from "fabric/fabric-impl";
-import { ObjectManagerStore } from "./objectManagerStore";
-import { makeAutoObservable } from "mobx";
-import { FontFaces, fontSizes, FontStyle, FontWeight, TextAlign } from "models/tools/Text";
+import {MouseEventObject, MouseEventStore, MouseEventType} from "./mouseEventStore";
+import {RootStore, Store} from "./rootStore";
+import {fabric} from "fabric";
+import {ToolTypes} from "models/tools/ToolTypes";
+import {ObjectEventStore, ObjectEventType} from "./objectEventStore";
+import {IEvent} from "fabric/fabric-impl";
+import {SelectionEventStore} from "./selectionEventStore";
+import {makeAutoObservable} from "mobx";
+import {FontFaces, fontSizes, FontStyle, FontWeight, TextAlign} from "models/tools/Text";
 import WebFont from "webfontloader";
-import { CanvasModeManager } from "./canvasStore";
+import {CanvasModeManager} from "./canvasStore";
+import {ObjectStore} from "./objectStore";
 
 const defaultStyles = {
     FONT_SIZE: fontSizes[fontSizes.length / 2],
@@ -20,24 +21,15 @@ const defaultStyles = {
     UNDERLINE: false,
 }
 
-interface TextStyles {
-    fontSize: number,
-    fill: string,
-    fontFamily: string,
-    textAlign: string,
-    fontStyle: string,
-    fontWeight: string | number,
-    underline: boolean,
-}
-
 export class TextStore implements Store, CanvasModeManager {
-    private readonly objectManager: ObjectManagerStore;
+    private readonly selectionEventStore: SelectionEventStore;
     private readonly mouseEventStore: MouseEventStore;
     private readonly objectEventStore: ObjectEventStore;
+    private readonly objectStore: ObjectStore;
     private readonly canvas: fabric.Canvas;
     private readonly listeners: any;
     private fontStyle = defaultStyles.FONT_STYLE;
-    private fontWeight = defaultStyles.FONT_WEIGHT;
+    private fontWeight: string = defaultStyles.FONT_WEIGHT;
     private autoRenderId: NodeJS.Timeout | undefined;
 
     fontSize = defaultStyles.FONT_SIZE;
@@ -51,9 +43,10 @@ export class TextStore implements Store, CanvasModeManager {
         makeAutoObservable(this);
         rootStore.canvasStore.registerCanvasModeManager(ToolTypes.TEXT, this);
         this.loadFont();
-        this.objectManager = rootStore.objectManagerStore;
+        this.selectionEventStore = rootStore.selectionEventStore;
         this.mouseEventStore = rootStore.mouseEventStore;
         this.objectEventStore = rootStore.objectEventStore;
+        this.objectStore = rootStore.objectStore;
         this.canvas = rootStore.canvasStore.canvas;
         this.listeners = {
             onMouseUp: this.onMouseUp.bind(this),
@@ -83,50 +76,35 @@ export class TextStore implements Store, CanvasModeManager {
     setFontSize(fontSize: number) {
         this.fontSize = fontSize;
         if (this.item) {
-            this.item.set({ fontSize: fontSize });
+            this.item.set({fontSize: fontSize});
             this.canvas.renderAll();
         }
     }
 
     setFill(fill: string) {
         this.fill = fill;
-        if (this.item) {
-            this.item.set({ fill: fill });
-            this.canvas.renderAll();
-        }
+        this.objectStore.setFill(fill);
     }
 
     setFontFamily(fontFamily: string) {
         this.fontFamily = fontFamily;
-        if (this.item) {
-            this.item.set({ fontFamily: fontFamily });
-            this.canvas.renderAll();
-        }
+        this.item?.set({fontFamily: fontFamily});
     }
 
     setTextAlign(textAlign: string) {
         this.textAlign = textAlign;
-        if (this.item) {
-            this.item.set({ textAlign: textAlign });
-            this.canvas.renderAll();
-        }
+        this.item?.set({textAlign: textAlign});
     }
 
     setUnderline(underline: boolean) {
         this.underline = underline;
-        if (this.item) {
-            this.item.set({ underline: underline });
-            this.canvas.renderAll();
-        }
+        this.item?.set({underline: underline});
     }
 
     setBold(bold: boolean) {
         const changedValue = bold ? FontWeight.BOLD : FontWeight.NORMAL;
         this.fontWeight = changedValue;
-        if (this.item) {
-            this.item.set({ fontWeight: changedValue });
-            this.canvas.renderAll();
-        }
+        this.item?.set({fontWeight: changedValue});
     }
 
     isBold() {
@@ -134,32 +112,29 @@ export class TextStore implements Store, CanvasModeManager {
     }
 
     setItalic(italic: boolean) {
-        const changedValue = italic ? FontStyle.ITALIC : FontStyle.NORMAL;
+        const changedValue = italic ? "italic" : "normal";
         this.fontStyle = changedValue;
-        if (this.item) {
-            this.item.set({ fontStyle: changedValue as any });
-            this.canvas.renderAll();
-        }
+        this.item?.set({fontStyle: changedValue});
     }
 
     isItalic() {
-        return this.fontStyle === FontStyle.ITALIC;
+        return this.fontStyle === "italic";
     }
 
     private addEventListener() {
         this.mouseEventStore.subscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
         this.objectEventStore.subscribe(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
-        this.objectManager.subscribe(this.listeners.updateObject);
+        this.selectionEventStore.subscribe(this.listeners.updateObject);
     }
 
     private removeEventListener() {
         this.mouseEventStore.unsubscribe(MouseEventType.MOUSE_UP, this.listeners.onMouseUp);
         this.objectEventStore.unsubscribe(ObjectEventType.OBJECT_MODIFIED, this.listeners.onModified);
-        this.objectManager.unsubscribe(this.listeners.updateObject);
+        this.selectionEventStore.unsubscribe(this.listeners.updateObject);
     }
 
     private updateObject(object: fabric.Object | undefined) {
-        if (object && this.isText(object)) {
+        if (object && this.objectStore.isText(object)) {
             this.item = object as fabric.IText;
             this.updateTextStyles();
         } else {
@@ -182,22 +157,13 @@ export class TextStore implements Store, CanvasModeManager {
             underline,
         } = this.item;
 
-        this.setTextStyles({
-            fontSize: fontSize || defaultStyles.FONT_SIZE,
-            fill: !fill ? defaultStyles.FILL : fill as string,
-            fontFamily: fontFamily || defaultStyles.FONT_FAMILY,
-            textAlign: textAlign || defaultStyles.TEXT_ALIGN,
-            fontStyle: fontStyle || defaultStyles.FONT_STYLE,
-            fontWeight: fontWeight || defaultStyles.FONT_WEIGHT,
-            underline: !!underline,
-        })
-    }
-
-    private setTextStyles(styles: TextStyles) {
-        this.setFontSize(styles.fontSize);
-        this.setFill(styles.fill);
-        this.setFontFamily(styles.fontFamily);
-        this.setTextAlign(styles.textAlign);
+        this.fontSize = fontSize || defaultStyles.FONT_SIZE;
+        this.fill = typeof fill === "string" ? fill : defaultStyles.FILL;
+        this.fontFamily = fontFamily || defaultStyles.FONT_FAMILY;
+        this.textAlign = textAlign || defaultStyles.TEXT_ALIGN;
+        this.fontStyle = fontStyle === FontStyle.NORMAL || fontStyle === FontStyle.ITALIC ? fontStyle : defaultStyles.FONT_STYLE;
+        this.fontWeight = typeof fontWeight === "string" ? fontWeight : defaultStyles.FONT_WEIGHT;
+        this.underline = !!underline;
     }
 
     private onMouseUp(e: MouseEventObject) {
@@ -208,11 +174,14 @@ export class TextStore implements Store, CanvasModeManager {
         this.item = new fabric.IText("텍스트를 입력해주세요", {
             top: e.currentCursorPosition.y,
             left: e.currentCursorPosition.x,
-            fontFamily: this.fontFamily,
             fontSize: this.fontSize,
-            textAlign: this.textAlign,
-            lockUniScaling: true,
             fill: this.fill,
+            fontFamily: this.fontFamily,
+            textAlign: this.textAlign,
+            fontStyle: this.fontStyle,
+            fontWeight: this.fontWeight,
+            underline: this.underline,
+            lockUniScaling: true,
         });
 
         this.item.setControlVisible("mt", false);
@@ -230,8 +199,8 @@ export class TextStore implements Store, CanvasModeManager {
     }
 
     private onModified(e: IEvent) {
-        const { target } = e;
-        if (!target || !this.isText(target)) {
+        const {target} = e;
+        if (!target || !this.objectStore.isText(target)) {
             return;
         }
 
@@ -248,10 +217,6 @@ export class TextStore implements Store, CanvasModeManager {
         return this.rootStore.canvasStore.canvasMode === ToolTypes.TEXT;
     }
 
-    private isText(object: fabric.Object) {
-        return object.isType("i-text");
-    }
-
     private loadFont() {
         WebFont.load({
             google: {
@@ -263,7 +228,7 @@ export class TextStore implements Store, CanvasModeManager {
     private addFontAutoRender() {
         this.autoRenderId = setInterval(() => {
             this.canvas.getActiveObjects()
-                .filter(object => this.isText(object))
+                .filter(object => this.objectStore.isText(object))
                 .forEach((object) => {
                     const textObject = object as fabric.IText;
                     textObject.initDimensions();

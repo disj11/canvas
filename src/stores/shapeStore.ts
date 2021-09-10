@@ -3,9 +3,10 @@ import { ShapeType } from "models/tools/Shape";
 import { ToolTypes } from "models/tools/ToolTypes";
 import { CanvasModeManager } from "./canvasStore";
 import { MouseEventObject, MouseEventStore, MouseEventType } from "./mouseEventStore";
-import { ObjectManagerStore } from "./objectManagerStore";
+import { SelectionEventStore } from "./selectionEventStore";
 import { RootStore, Store } from "./rootStore";
 import {fabric} from "fabric";
+import {ObjectStore} from "./objectStore";
 
 const defaultStyles = {
     shapeType: ShapeType.ELLIPSE,
@@ -14,23 +15,18 @@ const defaultStyles = {
     stroke: "#000000",
 }
 
-interface ShapeStyles {
-    fill: string | undefined;
-    strokeWidth: number;
-    stroke: string | undefined;
-}
-
 export class ShapeStore implements Store, CanvasModeManager {
     private static readonly MIN_OBJECT_SIZE = 30;
     private readonly canvas: fabric.Canvas;
     private readonly mouseEventStore: MouseEventStore;
-    private readonly objectManager: ObjectManagerStore;
+    private readonly selectionEventStore: SelectionEventStore;
+    private readonly objectStore: ObjectStore;
     private readonly listeners: any;
     private isDragMode = false;
 
     item: fabric.Rect | fabric.Triangle | fabric.Ellipse | undefined;
-    shapeType = defaultStyles.shapeType;
     fill: string | undefined = defaultStyles.fill;
+    shapeType = defaultStyles.shapeType;
     strokeWidth = defaultStyles.strokeWidth;
     stroke: string | undefined = defaultStyles.stroke;
 
@@ -39,7 +35,8 @@ export class ShapeStore implements Store, CanvasModeManager {
         rootStore.canvasStore.registerCanvasModeManager(ToolTypes.SHAPE, this);
         this.canvas = rootStore.canvasStore.canvas;
         this.mouseEventStore = rootStore.mouseEventStore;
-        this.objectManager = rootStore.objectManagerStore;
+        this.selectionEventStore = rootStore.selectionEventStore;
+        this.objectStore = rootStore.objectStore;
         this.listeners = {
             onMouseUp: this.onMouseUp.bind(this),
             onMouseDown: this.onMouseDown.bind(this),
@@ -72,49 +69,34 @@ export class ShapeStore implements Store, CanvasModeManager {
 
     setFill(fill: string | undefined) {
         this.fill = fill;
-        if (this.item) {
-            this.item.set({ fill: fill });
-            this.canvas.renderAll();
-        }
+        this.objectStore.setFill(fill);
     }
 
     setStroke(stroke: string | undefined) {
         this.stroke = stroke;
-        if (this.item) {
-            this.item.set({ stroke: stroke });
-            this.canvas.renderAll();
-        }
+        this.objectStore.setStroke(stroke);
     }
 
     setStrokeWidth(strokeWidth: number) {
         this.strokeWidth = strokeWidth;
-        if (this.item) {
-            this.item.set({ strokeWidth: strokeWidth });
-            this.canvas.renderAll();
-        }
+        this.objectStore.setStrokeWidth(strokeWidth);
     }
 
     private addReactions() {
-        this.objectManager.subscribe(this.listeners.updateObject);
+        this.selectionEventStore.subscribe(this.listeners.updateObject);
     }
 
     private removeReactions() {
-        this.objectManager.unsubscribe(this.listeners.updateObject);
+        this.selectionEventStore.unsubscribe(this.listeners.updateObject);
     }
 
     private updateObject(object: fabric.Object | undefined) {
-        if (this.isShape(object)) {
+        if (this.objectStore.isShape(object)) {
             this.item = object;
             this.updateShapeStyles();
         } else {
             this.item = undefined;
         }
-    }
-
-    private setShapeStyles(styles: ShapeStyles) {
-        this.setFill(styles.fill);
-        this.setStroke(styles.stroke);
-        this.setStrokeWidth(styles.strokeWidth);
     }
 
     private updateShapeStyles() {
@@ -128,11 +110,9 @@ export class ShapeStore implements Store, CanvasModeManager {
             fill,
         } = this.item;
 
-        this.setShapeStyles({
-            fill: fill === undefined ? fill : fill as string,
-            stroke: stroke,
-            strokeWidth: strokeWidth || defaultStyles.strokeWidth,
-        })
+        this.fill = typeof fill === "string" ? fill : undefined;
+        this.stroke = stroke;
+        this.strokeWidth = strokeWidth || defaultStyles.strokeWidth;
     }
 
     private addEventListeners() {
@@ -149,10 +129,6 @@ export class ShapeStore implements Store, CanvasModeManager {
 
     private isShapeTool() {
         return this.rootStore.canvasStore.canvasMode === ToolTypes.SHAPE;
-    }
-
-    private isShape(object: fabric.Object | undefined) {
-        return object?.isType(ShapeType.ELLIPSE.value) || object?.isType(ShapeType.RECT.value) || object?.isType(ShapeType.TRIANGLE.value);
     }
 
     private onMouseDown(e: MouseEventObject) {

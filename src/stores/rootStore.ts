@@ -2,12 +2,13 @@ import { fabric } from "fabric";
 import { BrushStore } from "./brushStore";
 import { CanvasStore } from "./canvasStore";
 import { MouseEventStore } from "./mouseEventStore";
-import { ObjectManagerStore } from "./objectManagerStore";
+import { SelectionEventStore } from "./selectionEventStore";
 import { ObjectEventStore } from "./objectEventStore";
 import { ShapeStore } from "./shapeStore";
 import { UIStore } from "./UIStore";
 import { TextStore } from "./textStore";
 import { SelectStore } from "./selectStore";
+import {ObjectStore} from "./objectStore";
 
 export interface Store {
     onInit: () => void;
@@ -17,10 +18,11 @@ export interface Store {
 export class RootStore implements Store {
     private readonly canvasElement: HTMLCanvasElement;
     canvasStore: CanvasStore;
-    objectManagerStore: ObjectManagerStore;
+    selectionEventStore: SelectionEventStore;
     objectEventStore: ObjectEventStore;
     mouseEventStore: MouseEventStore;
 
+    objectStore: ObjectStore;
     brushStore: BrushStore;
     shapeStore: ShapeStore;
     textStore: TextStore;
@@ -32,10 +34,11 @@ export class RootStore implements Store {
         document.body.append(this.canvasElement);
 
         this.canvasStore = new CanvasStore(this, new fabric.Canvas(this.canvasElement));
-        this.objectManagerStore = new ObjectManagerStore(this);
+        this.selectionEventStore = new SelectionEventStore(this);
         this.objectEventStore = new ObjectEventStore(this);
         this.mouseEventStore = new MouseEventStore(this);
 
+        this.objectStore = new ObjectStore(this);
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);
         this.textStore = new TextStore(this);

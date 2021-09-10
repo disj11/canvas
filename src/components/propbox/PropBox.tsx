@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
 
 const PropBox = observer(() => {
     const classes = useStyles();
-    const {canvasStore, objectManagerStore} = useStores();
+    const {canvasStore, objectStore} = useStores();
     const selectedTool = canvasStore.canvasMode;
-    const activeObject = objectManagerStore.activeObject;
+    const activeObject = objectStore.activeObject;
 
     return (
         <React.Fragment>
@@ -33,9 +33,9 @@ const PropBox = observer(() => {
                     {selectedTool === ToolTypes.CANVAS && (<CanvasPropBox/>)}
                 </React.Fragment>}
                 {activeObject && <React.Fragment>
-                    {objectManagerStore.isPath() && <BrushPropBox/>}
-                    {objectManagerStore.isShape() && <ShapePropBox/>}
-                    {objectManagerStore.isText() && <TextPropBox/>}
+                    {objectStore.isPath() && <BrushPropBox/>}
+                    {objectStore.isShape() && <ShapePropBox/>}
+                    {objectStore.isText() && <TextPropBox/>}
                 </React.Fragment>}
             </div>
         </React.Fragment>
