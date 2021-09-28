@@ -64,6 +64,10 @@ export class ObjectStore implements Store {
         return object?.isType("i-text");
     }
 
+    public isImage(object = this.activeObject) {
+        return object?.isType("image");
+    }
+
     public isActiveSelection(object = this.activeObject) {
         return object?.isType("activeSelection");
     }
@@ -73,6 +77,7 @@ export class ObjectStore implements Store {
     }
 
     public getObjectTypeName(object = this.activeObject): string {
+        console.log(object?.type);
         if (this.isRect(object)) {
             return ShapeType.RECT.display;
         } else if (this.isEllipse(object)) {
@@ -83,6 +88,8 @@ export class ObjectStore implements Store {
             return "패스";
         } else if (this.isText(object)) {
             return "텍스트";
+        } else if (this.isImage(object)) {
+            return "이미지";
         } else if (this.isGroup(object)) {
             return "그룹"
         } else {
@@ -100,6 +107,14 @@ export class ObjectStore implements Store {
 
     public setStrokeWidth(value: number | undefined, object = this.activeObject) {
         this.setStyles("strokeWidth", value, object);
+    }
+
+    public setScaleX(value: number, object = this.activeObject) {
+        this.setStyles("scaleX", value, object);
+    }
+
+    public setScaleY(value: number, object = this.activeObject) {
+        this.setStyles("scaleY", value, object);
     }
 
     private setStyles(key: keyof fabric.Object, value: any, object = this.activeObject) {

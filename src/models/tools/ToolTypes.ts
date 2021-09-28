@@ -4,6 +4,7 @@ export class ToolTypes {
     public static readonly BRUSH = new ToolTypes("brush", "브러쉬");
     public static readonly SHAPE = new ToolTypes("shape", "셰이프");
     public static readonly TEXT = new ToolTypes("text", "텍스트");
+    public static readonly IMAGE = new ToolTypes("image", "이미지");
     public static readonly CANVAS = new ToolTypes("canvas", "캔버스");
 
     constructor(

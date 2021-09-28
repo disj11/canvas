@@ -8,6 +8,7 @@ import ShapePropBox from "./ShapePropBox";
 import TextPropBox from "./TextPropBox";
 import CanvasPropBox from "./CanvasPropBox";
 import SelectPropBox from "./SelectPropBox";
+import ImagePropBox from "./ImagePropBox";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,12 +31,14 @@ const PropBox = observer(() => {
                     {selectedTool === ToolTypes.BRUSH && (<BrushPropBox/>)}
                     {selectedTool === ToolTypes.SHAPE && (<ShapePropBox/>)}
                     {selectedTool === ToolTypes.TEXT && (<TextPropBox/>)}
+                    {selectedTool === ToolTypes.IMAGE && (<ImagePropBox/>)}
                     {selectedTool === ToolTypes.CANVAS && (<CanvasPropBox/>)}
                 </React.Fragment>}
                 {activeObject && <React.Fragment>
                     {objectStore.isPath() && <BrushPropBox/>}
                     {objectStore.isShape() && <ShapePropBox/>}
                     {objectStore.isText() && <TextPropBox/>}
+                    {objectStore.isImage() && <ImagePropBox/>}
                 </React.Fragment>}
             </div>
         </React.Fragment>

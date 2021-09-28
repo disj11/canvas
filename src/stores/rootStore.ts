@@ -9,6 +9,7 @@ import { UIStore } from "./UIStore";
 import { TextStore } from "./textStore";
 import { SelectStore } from "./selectStore";
 import {ObjectStore} from "./objectStore";
+import {ImageStore} from "./imageStore";
 
 export interface Store {
     onInit: () => void;
@@ -26,6 +27,7 @@ export class RootStore implements Store {
     brushStore: BrushStore;
     shapeStore: ShapeStore;
     textStore: TextStore;
+    imageStore: ImageStore;
     selectStore: SelectStore;
     UIStore: UIStore;
 
@@ -42,6 +44,7 @@ export class RootStore implements Store {
         this.brushStore = new BrushStore(this);
         this.shapeStore = new ShapeStore(this);
         this.textStore = new TextStore(this);
+        this.imageStore = new ImageStore(this);
         this.selectStore = new SelectStore(this);
         this.UIStore = new UIStore(this);
     }

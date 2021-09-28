@@ -11,6 +11,7 @@ import {ToolTypes} from "../../models/tools/ToolTypes";
 import MenuToolButton from "./MenuToolButton";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import PhotoSizeSelectSmallIcon from "@material-ui/icons/PhotoSizeSelectSmall";
+import ImageIcon from "@material-ui/icons/Image";
 
 const useStyles = makeStyles(() => ({
     appBarColor: {
@@ -69,6 +70,12 @@ const ToolBox = observer(() => {
                         text={ToolTypes.TEXT.display}
                         onClick={() => canvasStore.setCanvasMode(ToolTypes.TEXT)}
                         selected={canvasStore.canvasMode === ToolTypes.TEXT}
+                    />
+                    <ToolButton
+                        icon={<ImageIcon/>}
+                        text={ToolTypes.IMAGE.display}
+                        onClick={() => canvasStore.setCanvasMode(ToolTypes.IMAGE)}
+                        selected={canvasStore.canvasMode === ToolTypes.IMAGE}
                     />
                     <ToolButton
                         icon={<PhotoSizeSelectSmallIcon/>}
