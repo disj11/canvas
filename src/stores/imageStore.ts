@@ -5,6 +5,7 @@ import {fabric} from "fabric";
 import {ObjectStore} from "./objectStore";
 
 export class ImageStore {
+    public readonly uploadedImages: {name: string, dataUrl: string}[] = [];
     private readonly canvasStore: CanvasStore;
     private readonly objectStore: ObjectStore;
 
@@ -34,5 +35,26 @@ export class ImageStore {
 
             this.canvasStore.canvas.add(img);
         });
+    }
+
+    public upload(files: File[]) {
+        files.forEach(async (file) => {
+            const dataUrl = await this.readFileAsync(file);
+            if (typeof dataUrl === "string") {
+                this.uploadedImages.push({
+                    name: file.name,
+                    dataUrl: dataUrl,
+                });
+            }
+        });
+    }
+
+    private readFileAsync(file: File): Promise<string | ArrayBuffer | null> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject();
+            reader.readAsDataURL(file);
+        })
     }
 }
