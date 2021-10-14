@@ -14,9 +14,6 @@ import PhotoSizeSelectSmallIcon from "@mui/icons-material/PhotoSizeSelectSmall";
 import ImageIcon from "@mui/icons-material/Image";
 
 const useStyles = makeStyles(() => ({
-    appBarColor: {
-        backgroundColor: "rgba(30,30,30,0.95)",
-    },
     left: {
         justifyContent: "flex-start",
     },
@@ -35,13 +32,7 @@ const ToolBox = observer(() => {
     const {canvasStore} = useStores();
 
     return (
-        <AppBar
-            classes={{
-                colorDefault: classes.appBarColor,
-            }}
-            color={"default"}
-            elevation={0}
-        >
+        <AppBar>
             <Toolbar variant={"dense"}>
                 <div className={classes.left}>
                     <MenuToolButton/>

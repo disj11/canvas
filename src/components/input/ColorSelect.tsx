@@ -39,7 +39,7 @@ const ColorSelect = ({ color, onChange }: Props) => {
                 <ColorPicker color={color} onChange={handleColorChange} disabled={selectedValue === "none"} />
             </Box>
             <Box flex={1}>
-                <FormControl fullWidth>
+                <FormControl variant={"standard"} fullWidth>
                     <Select
                         value={selectedValue}
                         onChange={handleSelectedValueChange}

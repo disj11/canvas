@@ -1,6 +1,5 @@
 import React from "react";
-import withStyles from '@mui/styles/withStyles';
-import Menu, {MenuProps} from "@mui/material/Menu";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,36 +10,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import {useStores} from "../../hooks/useStores";
 import {FileUtils} from "../../utils/FileUtils";
-
-const StyledMenu = withStyles({
-    paper: {
-        border: "1px solid #d3d4d5",
-    },
-})((props: MenuProps) => (
-    <Menu
-        elevation={0}
-        anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-        }}
-        transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-        }}
-        {...props}
-    />
-));
-
-const StyledMenuItem = withStyles((theme) => ({
-    root: {
-        "&:focus": {
-            backgroundColor: theme.palette.primary.main,
-            "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                color: theme.palette.common.white,
-            },
-        },
-    },
-}))(MenuItem);
+import {MenuList} from "@mui/material";
 
 export default function MenuToolButton() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -94,31 +64,33 @@ export default function MenuToolButton() {
                 accept="application/json"
             />
             <ToolButton icon={<MenuIcon/>} text={"메뉴"} onClick={handleClick}/>
-            <StyledMenu
+            <Menu
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <StyledMenuItem onClick={handleFileOpen}>
-                    <ListItemIcon>
-                        <DescriptionIcon fontSize="small"/>
-                    </ListItemIcon>
-                    <ListItemText primary="열기"/>
-                </StyledMenuItem>
-                <StyledMenuItem onClick={handleSave}>
-                    <ListItemIcon>
-                        <SaveIcon fontSize="small"/>
-                    </ListItemIcon>
-                    <ListItemText primary="저장"/>
-                </StyledMenuItem>
-                <StyledMenuItem onClick={handleImageSave}>
-                    <ListItemIcon>
-                        <SaveAltIcon fontSize="small"/>
-                    </ListItemIcon>
-                    <ListItemText primary="이미지로 저장"/>
-                </StyledMenuItem>
-            </StyledMenu>
+                <MenuList>
+                    <MenuItem onClick={handleFileOpen}>
+                        <ListItemIcon>
+                            <DescriptionIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText primary="열기"/>
+                    </MenuItem>
+                    <MenuItem onClick={handleSave}>
+                        <ListItemIcon>
+                            <SaveIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText primary="저장"/>
+                    </MenuItem>
+                    <MenuItem onClick={handleImageSave}>
+                        <ListItemIcon>
+                            <SaveAltIcon fontSize="small"/>
+                        </ListItemIcon>
+                        <ListItemText primary="이미지로 저장"/>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
         </div>
     );
 }

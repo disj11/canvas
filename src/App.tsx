@@ -5,6 +5,7 @@ import rootStore from "./stores/rootStore";
 import createTheme from '@mui/material/styles/createTheme';
 import {ThemeProvider} from "@mui/styles";
 import {Theme} from '@mui/material/styles';
+import {CssBaseline} from "@mui/material";
 
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
@@ -18,6 +19,7 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <StoreProvider value={rootStore}>
                 <Canvas/>
             </StoreProvider>

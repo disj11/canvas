@@ -1,23 +1,8 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
-import BoldButton from './BoldButton';
-import ItalicButton from './ItalicButton';
-import UnderlineButton from './UnderlineButton';
-
-const useStyles = makeStyles((theme) => ({
-    alignBox: {
-        display: "flex",
-        "& > *": {
-            flex: 1,
-            marginRight: theme.spacing(1),
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            "&:last-child": {
-                marginRight: 0,
-            }
-        }
-    },
-}));
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import {ToggleButton, ToggleButtonGroup} from '@mui/material';
 
 interface Props {
     bold: boolean;
@@ -28,15 +13,47 @@ interface Props {
     toggleUnderline: (underline: boolean) => void;
 }
 
+enum TextStyle {
+    BOLD = "BOLD",
+    ITALIC = "ITALIC",
+    UNDERLINED = "UNDERLINED",
+}
+
 const TextStyleButton = ({bold, italic, underline, toggleBold, toggleItalic, toggleUnderline}: Props) => {
-    const classes = useStyles();
+    const formats = React.useMemo(() => {
+        const formats = [];
+        if (bold) formats.push(TextStyle.BOLD);
+        if (italic) formats.push(TextStyle.ITALIC);
+        if (underline) formats.push(TextStyle.UNDERLINED);
+        return formats;
+    }, [bold, italic, underline]);
+
+    const handleFormat = (
+        event: React.MouseEvent<HTMLElement>,
+        newFormats: string[],
+    ) => {
+        toggleBold(newFormats.includes(TextStyle.BOLD));
+        toggleItalic(newFormats.includes(TextStyle.ITALIC));
+        toggleUnderline(newFormats.includes(TextStyle.UNDERLINED));
+    };
     
     return (
-        <div className={classes.alignBox}>
-            <BoldButton bold={bold} toggle={toggleBold}/>
-            <ItalicButton italic={italic} toggle={toggleItalic}/>
-            <UnderlineButton underline={underline} toggle={toggleUnderline}/>
-        </div>
+        <ToggleButtonGroup
+            value={formats}
+            onChange={handleFormat}
+            aria-label="text formatting"
+            fullWidth
+        >
+            <ToggleButton value={TextStyle.BOLD} aria-label="bold">
+                <FormatBoldIcon />
+            </ToggleButton>
+            <ToggleButton value={TextStyle.ITALIC} aria-label="italic">
+                <FormatItalicIcon />
+            </ToggleButton>
+            <ToggleButton value={TextStyle.UNDERLINED} aria-label="underlined">
+                <FormatUnderlinedIcon />
+            </ToggleButton>
+        </ToggleButtonGroup>
     )
 }
 

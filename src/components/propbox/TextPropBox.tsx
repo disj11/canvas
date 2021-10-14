@@ -35,7 +35,7 @@ const TextPropBox = observer(() => {
         <PropBoxLayout>
             <div className={classes.propBox}>
                 <PropBoxItem label={"폰트"}>
-                    <FormControl fullWidth>
+                    <FormControl variant={"standard"} fullWidth>
                         <Select
                             value={textStore.fontFamily}
                             onChange={handleFontFamilyChange}
@@ -57,7 +57,7 @@ const TextPropBox = observer(() => {
                 <PropBoxItem label={"폰트 크기"}>
                     <Box display={"flex"}>
                         <Box flex={1} mr={1.5}>
-                            <FormControl fullWidth>
+                            <FormControl variant={"standard"} fullWidth>
                                 <Select
                                     value={textStore.fontSize.toString()}
                                     onChange={handleFontSizeChange}

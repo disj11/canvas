@@ -7,7 +7,6 @@ import {useStores} from "../../hooks/useStores";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircle, faPencilAlt, faSprayCan} from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
 import {ColorPalette, Range} from "components/input";
 import PropBoxLayout from "./PropBoxLayout";
 import PropBoxItem from "./PropBoxItem";
@@ -19,16 +18,16 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         marginRight: theme.spacing(0.5),
         "&:hover": {
-            background: CommonColor.BACKGROUND_GRADIENT_HOVER,
+            background: theme.palette.primary.light,
             "& *": {
-                color: "white",
+                color: theme.palette.primary.contrastText,
             }
         },
     },
     selected: {
-        background: CommonColor.BACKGROUND_GRADIENT,
+        background: theme.palette.primary.main,
         "& *": {
-            color: "white",
+            color: theme.palette.primary.contrastText,
         }
     },
 }))
