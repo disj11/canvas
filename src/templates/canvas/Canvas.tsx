@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     },
     left: {
         flexBasis: `${leftMenuWidth}px`,
-        backgroundColor: "#f0f0f0",
     },
     canvasWrapper: {
         display: "flex",
