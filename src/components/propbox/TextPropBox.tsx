@@ -1,11 +1,11 @@
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import React from "react";
 import PropBoxLayout from "./PropBoxLayout";
 import { AlignButton, ColorPicker, TextStyleButton } from "../input";
 import { useStores } from "hooks/useStores";
 import { observer } from "mobx-react";
-import { Box, FormControl, Select } from "@material-ui/core";
-import { MenuItem } from "@material-ui/core";
+import {Box, FormControl, Select, SelectChangeEvent} from "@mui/material";
+import { MenuItem } from "@mui/material";
 import { FontFaces, fontSizes } from "models/tools/Text";
 import PropBoxItem from "./PropBoxItem";
 
@@ -21,13 +21,13 @@ const TextPropBox = observer(() => {
     const classes = useStyles();
     const { textStore } = useStores();
 
-    const handleFontSizeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const fontSize = parseInt(event.target.value as string, 10);
+    const handleFontSizeChange = (event: SelectChangeEvent) => {
+        const fontSize = parseInt(event.target.value, 10);
         textStore.setFontSize(fontSize);
     };
 
-    const handleFontFamilyChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const fontFamily = event.target.value as string;
+    const handleFontFamilyChange = (event: SelectChangeEvent) => {
+        const fontFamily = event.target.value;
         textStore.setFontFamily(fontFamily);
     };
 
@@ -59,7 +59,7 @@ const TextPropBox = observer(() => {
                         <Box flex={1} mr={1.5}>
                             <FormControl fullWidth>
                                 <Select
-                                    value={textStore.fontSize}
+                                    value={textStore.fontSize.toString()}
                                     onChange={handleFontSizeChange}
                                 >
                                     <MenuItem value={textStore.fontSize}>{textStore.fontSize}</MenuItem>

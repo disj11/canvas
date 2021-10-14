@@ -1,5 +1,5 @@
-import {Button} from "@material-ui/core";
-import PublishIcon from "@material-ui/icons/Publish";
+import {Button} from "@mui/material";
+import PublishIcon from "@mui/icons-material/Publish";
 import React from "react";
 
 interface Props {

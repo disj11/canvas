@@ -1,14 +1,14 @@
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Button } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Button } from '@mui/material';
 import clsx from 'clsx';
 import { TextAlign } from 'models/tools/Text';
 import { CommonColor } from 'models/color/CommonColor';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     alignBox: {
         display: "flex",
         border: 2,

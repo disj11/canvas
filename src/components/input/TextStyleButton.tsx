@@ -1,5 +1,5 @@
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import BoldButton from './BoldButton';
 import ItalicButton from './ItalicButton';
 import UnderlineButton from './UnderlineButton';

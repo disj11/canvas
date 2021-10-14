@@ -1,14 +1,14 @@
 import React from "react";
-import {withStyles} from "@material-ui/core/styles";
-import Menu, {MenuProps} from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import withStyles from '@mui/styles/withStyles';
+import Menu, {MenuProps} from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import ToolButton from "./ToolButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import DescriptionIcon from "@material-ui/icons/Description";
-import SaveIcon from "@material-ui/icons/Save";
-import SaveAltIcon from "@material-ui/icons/SaveAlt";
+import MenuIcon from "@mui/icons-material/Menu";
+import DescriptionIcon from "@mui/icons-material/Description";
+import SaveIcon from "@mui/icons-material/Save";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import {useStores} from "../../hooks/useStores";
 import {FileUtils} from "../../utils/FileUtils";
 
@@ -19,7 +19,6 @@ const StyledMenu = withStyles({
 })((props: MenuProps) => (
     <Menu
         elevation={0}
-        getContentAnchorEl={null}
         anchorOrigin={{
             vertical: "bottom",
             horizontal: "center",

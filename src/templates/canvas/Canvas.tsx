@@ -1,9 +1,9 @@
 import React from "react";
 import {Layout} from "../layout";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
-import {Toolbar} from "@material-ui/core";
+import {Toolbar} from "@mui/material";
 import {useStores} from "../../hooks/useStores";
 import {PropBox} from "../../components/propbox";
 

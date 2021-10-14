@@ -1,5 +1,5 @@
 import React from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from "clsx";
 import {CommonColor} from "../../models/color/CommonColor";
 

@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 import PropBoxLayout from "./PropBoxLayout";
-import {Box, FormControl, Input, InputAdornment, InputLabel} from "@material-ui/core";
+import {Box, FormControl, Input, InputAdornment, InputLabel} from "@mui/material";
 import React from "react";
 import {ColorPalette} from "../input";
 import PropBoxItem from "./PropBoxItem";

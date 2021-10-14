@@ -1,7 +1,7 @@
-import { Select } from "@material-ui/core";
-import { MenuItem } from "@material-ui/core";
-import { FormControl } from "@material-ui/core";
-import { Box } from "@material-ui/core";
+import {Select, SelectChangeEvent} from "@mui/material";
+import { MenuItem } from "@mui/material";
+import { FormControl } from "@mui/material";
+import { Box } from "@mui/material";
 import usePrevious from "hooks/usePrevious";
 import { CommonColor } from "models/color/CommonColor";
 import React from "react"
@@ -22,8 +22,8 @@ const ColorSelect = ({ color, onChange }: Props) => {
         onChange(rgb);
     }
 
-    const handleSelectedValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const value = event.target.value as string;
+    const handleSelectedValueChange = (event: SelectChangeEvent) => {
+        const value = event.target.value;
         setSelectedValue(value);
 
         if (value === "none") {

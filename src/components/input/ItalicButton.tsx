@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faItalic } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { Button } from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Button } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { CommonColor } from "models/color/CommonColor";
 import clsx from "clsx";
 
