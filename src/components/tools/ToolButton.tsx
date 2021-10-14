@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     caption: {
+        marginTop: theme.spacing(0.5),
         fontSize: "0.70rem",
     },
     selected: {
