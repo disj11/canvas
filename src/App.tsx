@@ -3,16 +3,16 @@ import React from 'react';
 import {StoreProvider} from "./contexts/storeContext";
 import rootStore from "./stores/rootStore";
 import createTheme from '@mui/material/styles/createTheme';
-import {ThemeProvider} from "@mui/styles";
-import {Theme} from '@mui/material/styles';
+import {Theme, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline} from "@mui/material";
 
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
-const theme = createTheme();
 const App = () => {
+    const theme = React.useMemo(() => createTheme(), []);
+
     React.useEffect(() => {
         document.title = "캔버스";
     }, []);

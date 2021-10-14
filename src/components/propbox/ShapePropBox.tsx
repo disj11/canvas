@@ -17,17 +17,17 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(0.5),
         height: 40,
         "&:hover": {
-            background: theme.palette.primary.light,
+            background: theme.palette.primary.main,
             "& svg > *": {
-                stroke: theme.palette.primary.contrastText,
-            }
+                stroke: theme.palette.background.default,
+            },
         },
     },
     selected: {
         background: theme.palette.primary.main,
         "& svg > *": {
-            stroke: theme.palette.primary.contrastText,
-        }
+            stroke: theme.palette.background.default,
+        },
     },
     propBox: {
         "& > div": {

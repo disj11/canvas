@@ -10,10 +10,12 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
+        paddingTop: theme.spacing(0.5),
+        paddingBottom: theme.spacing(0.5),
         paddingRight: theme.spacing(3),
         paddingLeft: theme.spacing(3),
         "&:hover": {
-            backgroundColor: theme.palette.secondary.light,
+            backgroundColor: theme.palette.secondary.main,
         }
     },
     caption: {

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
-        backgroundColor: "#c0c0c0",
+        backgroundColor: theme.palette.grey.A400,
         padding: theme.spacing(3),
     },
 }))

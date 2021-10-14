@@ -17,18 +17,15 @@ const useStyles = makeStyles(theme => ({
         cursor: "pointer",
         padding: theme.spacing(1),
         marginRight: theme.spacing(0.5),
+        color: theme.palette.text.primary,
         "&:hover": {
-            background: theme.palette.primary.light,
-            "& *": {
-                color: theme.palette.primary.contrastText,
-            }
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.background.default,
         },
     },
     selected: {
-        background: theme.palette.primary.main,
-        "& *": {
-            color: theme.palette.primary.contrastText,
-        }
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.background.default,
     },
 }))
 
