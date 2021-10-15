@@ -11,7 +11,16 @@ declare module '@mui/styles/defaultTheme' {
 }
 
 const App = () => {
-    const theme = React.useMemo(() => createTheme(), []);
+    const theme = React.useMemo(() => createTheme({
+        palette: {
+            primary: {
+                main: "#292929",
+            },
+            secondary: {
+                main: "#aa75ff",
+            },
+        }
+    }), []);
 
     React.useEffect(() => {
         document.title = "캔버스";
