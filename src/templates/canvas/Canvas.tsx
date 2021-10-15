@@ -1,9 +1,9 @@
 import React from "react";
 import {Layout} from "../layout";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
-import {Toolbar} from "@material-ui/core";
+import {Toolbar} from "@mui/material";
 import {useStores} from "../../hooks/useStores";
 import {PropBox} from "../../components/propbox";
 
@@ -24,14 +24,13 @@ const useStyles = makeStyles((theme) => ({
     },
     left: {
         flexBasis: `${leftMenuWidth}px`,
-        backgroundColor: "#f0f0f0",
     },
     canvasWrapper: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
-        backgroundColor: "#c0c0c0",
+        backgroundColor: theme.palette.grey.A400,
         padding: theme.spacing(3),
     },
 }))

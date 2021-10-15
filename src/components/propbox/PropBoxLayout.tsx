@@ -1,5 +1,5 @@
-import {Typography} from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {Typography} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useStores } from "hooks/useStores";
 import { observer } from "mobx-react";
 import React from "react";

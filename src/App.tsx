@@ -2,20 +2,37 @@ import {Canvas} from 'templates/canvas';
 import React from 'react';
 import {StoreProvider} from "./contexts/storeContext";
 import rootStore from "./stores/rootStore";
-import {CssBaseline} from "@material-ui/core";
+import createTheme from '@mui/material/styles/createTheme';
+import {Theme, ThemeProvider} from '@mui/material/styles';
+import {CssBaseline} from "@mui/material";
+
+declare module '@mui/styles/defaultTheme' {
+    interface DefaultTheme extends Theme {}
+}
 
 const App = () => {
+    const theme = React.useMemo(() => createTheme({
+        palette: {
+            primary: {
+                main: "#292929",
+            },
+            secondary: {
+                main: "#aa75ff",
+            },
+        }
+    }), []);
+
     React.useEffect(() => {
         document.title = "캔버스";
     }, []);
 
     return (
-        <React.Fragment>
-            <CssBaseline />
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <StoreProvider value={rootStore}>
                 <Canvas/>
             </StoreProvider>
-        </React.Fragment>
+        </ThemeProvider>
     );
 }
 

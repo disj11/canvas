@@ -1,10 +1,9 @@
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 import React from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import {observer} from "mobx-react";
 import {ShapeType} from "../../models/tools/Shape";
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
 import PropBoxLayout from "./PropBoxLayout";
 import {useStores} from "hooks/useStores";
 import {ColorSelect, Range} from "components/input";
@@ -18,17 +17,17 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(0.5),
         height: 40,
         "&:hover": {
-            background: CommonColor.BACKGROUND_GRADIENT_HOVER,
+            background: theme.palette.primary.main,
             "& svg > *": {
-                stroke: "white",
-            }
+                stroke: theme.palette.background.default,
+            },
         },
     },
     selected: {
-        background: CommonColor.BACKGROUND_GRADIENT,
+        background: theme.palette.primary.main,
         "& svg > *": {
-            stroke: "white",
-        }
+            stroke: theme.palette.background.default,
+        },
     },
     propBox: {
         "& > div": {

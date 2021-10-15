@@ -1,12 +1,12 @@
-import { Select } from "@material-ui/core";
-import { MenuItem } from "@material-ui/core";
-import { FormControl } from "@material-ui/core";
-import { Box } from "@material-ui/core";
+import {Select, SelectChangeEvent} from "@mui/material";
+import { MenuItem } from "@mui/material";
+import { FormControl } from "@mui/material";
+import { Box } from "@mui/material";
 import usePrevious from "hooks/usePrevious";
-import { CommonColor } from "models/color/CommonColor";
 import React from "react"
 import { ColorResult } from "react-color"
 import ColorPicker from "./ColorPicker"
+import {useTheme} from "@mui/styles";
 
 interface Props {
     color: string | undefined;
@@ -15,6 +15,7 @@ interface Props {
 
 const ColorSelect = ({ color, onChange }: Props) => {
     const previousColor = usePrevious(color);
+    const theme = useTheme();
     const [selectedValue, setSelectedValue] = React.useState<string>(!color ? "none" : "solid");
 
     const handleColorChange = (color: ColorResult) => {
@@ -22,14 +23,14 @@ const ColorSelect = ({ color, onChange }: Props) => {
         onChange(rgb);
     }
 
-    const handleSelectedValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const value = event.target.value as string;
+    const handleSelectedValueChange = (event: SelectChangeEvent) => {
+        const value = event.target.value;
         setSelectedValue(value);
 
         if (value === "none") {
             onChange(undefined);
         } else {
-            onChange(previousColor || CommonColor.PRIMARY);
+            onChange(previousColor || theme.palette.primary.main);
         }
     };
 
@@ -39,7 +40,7 @@ const ColorSelect = ({ color, onChange }: Props) => {
                 <ColorPicker color={color} onChange={handleColorChange} disabled={selectedValue === "none"} />
             </Box>
             <Box flex={1}>
-                <FormControl fullWidth>
+                <FormControl variant={"standard"} fullWidth>
                     <Select
                         value={selectedValue}
                         onChange={handleSelectedValueChange}

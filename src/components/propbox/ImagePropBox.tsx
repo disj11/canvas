@@ -2,7 +2,7 @@ import PropBoxLayout from "./PropBoxLayout";
 import {ImageUploadButton} from "../input";
 import React from "react";
 import PropBoxItem from "./PropBoxItem";
-import {Grid} from "@material-ui/core";
+import {Grid} from "@mui/material";
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 

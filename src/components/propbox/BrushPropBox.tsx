@@ -1,13 +1,12 @@
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 import {BrushType} from "../../models/tools/Brush";
 import React from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircle, faPencilAlt, faSprayCan} from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
 import {ColorPalette, Range} from "components/input";
 import PropBoxLayout from "./PropBoxLayout";
 import PropBoxItem from "./PropBoxItem";
@@ -18,18 +17,15 @@ const useStyles = makeStyles(theme => ({
         cursor: "pointer",
         padding: theme.spacing(1),
         marginRight: theme.spacing(0.5),
+        color: theme.palette.text.primary,
         "&:hover": {
-            background: CommonColor.BACKGROUND_GRADIENT_HOVER,
-            "& *": {
-                color: "white",
-            }
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.background.default,
         },
     },
     selected: {
-        background: CommonColor.BACKGROUND_GRADIENT,
-        "& *": {
-            color: "white",
-        }
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.background.default,
     },
 }))
 

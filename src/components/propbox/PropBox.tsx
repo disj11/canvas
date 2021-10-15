@@ -1,6 +1,6 @@
 import React from "react";
 import {observer} from "mobx-react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import {useStores} from "../../hooks/useStores";
 import {ToolTypes} from "../../models/tools/ToolTypes";
 import BrushPropBox from "./BrushPropBox";

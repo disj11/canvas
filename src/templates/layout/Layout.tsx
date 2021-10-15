@@ -1,7 +1,6 @@
 import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {CircularProgress} from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {CircularProgress} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
     progressWrapper: {
@@ -16,7 +15,6 @@ const Layout = ({ loading, children }: Props) => {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <div>
                 {loading ? (
                     <div className={classes.progressWrapper}><CircularProgress /></div>

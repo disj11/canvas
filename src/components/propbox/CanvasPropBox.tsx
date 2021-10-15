@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
 import {useStores} from "../../hooks/useStores";
 import PropBoxLayout from "./PropBoxLayout";
-import {Box, FormControl, Input, InputAdornment, InputLabel} from "@material-ui/core";
+import {Box, FormControl, Input, InputAdornment, InputLabel} from "@mui/material";
 import React from "react";
 import {ColorPalette} from "../input";
 import PropBoxItem from "./PropBoxItem";
@@ -16,7 +16,7 @@ const CanvasPropBox = observer(() => {
             <PropBoxItem label={"캔버스 크기 조정"} mb={3}>
                 <Box display={"flex"}>
                     <Box flex={1} mr={1.5}>
-                        <FormControl fullWidth>
+                        <FormControl variant={"standard"} fullWidth>
                             <InputLabel htmlFor={"canvas-width"}>너비</InputLabel>
                             <Input
                                 id={"canvas-width"}
@@ -29,7 +29,7 @@ const CanvasPropBox = observer(() => {
                         </FormControl>
                     </Box>
                     <Box flex={1}>
-                        <FormControl fullWidth>
+                        <FormControl variant={"standard"} fullWidth>
                             <InputLabel htmlFor={"canvas-width"}>높이</InputLabel>
                             <Input
                                 id={"canvas-width"}

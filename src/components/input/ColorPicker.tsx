@@ -1,7 +1,7 @@
-import {Popover, Typography} from "@material-ui/core";
+import {Popover, Typography} from "@mui/material";
 import React from "react";
 import {ChromePicker, ColorResult} from "react-color"
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 
 interface Props {
     label?: string,

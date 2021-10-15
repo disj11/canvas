@@ -1,29 +1,9 @@
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Button } from '@material-ui/core';
-import clsx from 'clsx';
-import { TextAlign } from 'models/tools/Text';
-import { CommonColor } from 'models/color/CommonColor';
-
-const useStyles = makeStyles((theme) => ({
-    alignBox: {
-        display: "flex",
-        border: 2,
-        borderStyle: "solid",
-        borderColor: "#ddd",
-    },
-    alignButton: {
-        flex: 1,
-        borderRadius: 0,
-    },
-    selected: {
-        background: CommonColor.BACKGROUND_GRADIENT,
-        color: "#ffffff",
-    }
-}));
+import {ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {TextAlign} from 'models/tools/Text';
 
 interface Props {
     textAlign: string,
@@ -31,20 +11,33 @@ interface Props {
 }
 
 const AlignButton = ({textAlign, onChange}: Props) => {
-    const classes = useStyles();
-    
+    const handleAlignment = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string | undefined,
+    ) => {
+        if (onChange) {
+            onChange(newAlignment || TextAlign.LEFT);
+        }
+    };
+
     return (
-        <div className={classes.alignBox}>
-            <Button className={clsx(classes.alignButton, textAlign === TextAlign.LEFT && classes.selected)} onClick={() => onChange(TextAlign.LEFT)}>
-                <FormatAlignLeftIcon/>
-            </Button>
-            <Button className={clsx(classes.alignButton, textAlign === TextAlign.CENTER && classes.selected)} onClick={() => onChange(TextAlign.CENTER)}>
-                <FormatAlignCenterIcon/>
-            </Button>
-            <Button className={clsx(classes.alignButton, textAlign === TextAlign.RIGHT && classes.selected)} onClick={() => onChange(TextAlign.RIGHT)}>
-                <FormatAlignRightIcon/>
-            </Button>
-        </div>
+        <ToggleButtonGroup
+            value={textAlign}
+            exclusive
+            onChange={handleAlignment}
+            aria-label="text alignment"
+            fullWidth
+        >
+            <ToggleButton value={TextAlign.LEFT} aria-label="left aligned">
+                <FormatAlignLeftIcon />
+            </ToggleButton>
+            <ToggleButton value={TextAlign.CENTER} aria-label="centered">
+                <FormatAlignCenterIcon />
+            </ToggleButton>
+            <ToggleButton value={TextAlign.RIGHT} aria-label="right aligned">
+                <FormatAlignRightIcon />
+            </ToggleButton>
+        </ToggleButtonGroup>
     )
 }
 

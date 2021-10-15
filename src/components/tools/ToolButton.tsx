@@ -1,24 +1,29 @@
 import React from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from "clsx";
-import {CommonColor} from "../../models/color/CommonColor";
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        display: "inline-block",
+        minHeight: 48,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
         cursor: "pointer",
-        color: "#fff",
         paddingTop: theme.spacing(0.5),
         paddingBottom: theme.spacing(0.5),
         paddingRight: theme.spacing(3),
         paddingLeft: theme.spacing(3),
-        textAlign: "center",
+        "&:hover": {
+            backgroundColor: theme.palette.secondary.main,
+        }
     },
     caption: {
+        marginTop: theme.spacing(0.5),
         fontSize: "0.70rem",
     },
     selected: {
-        background: CommonColor.BACKGROUND_GRADIENT,
+        backgroundColor: theme.palette.secondary.main,
     }
 }));
 
