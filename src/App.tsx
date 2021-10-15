@@ -5,6 +5,7 @@ import rootStore from "./stores/rootStore";
 import createTheme from '@mui/material/styles/createTheme';
 import {Theme, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline} from "@mui/material";
+import ReactGA from "react-ga4";
 
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
@@ -24,6 +25,8 @@ const App = () => {
 
     React.useEffect(() => {
         document.title = "캔버스";
+        ReactGA.initialize("G-4QR05JWTBZ");
+        ReactGA.send(window.location.pathname);
     }, []);
 
     return (
