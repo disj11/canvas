@@ -13,10 +13,10 @@ interface Props {
 const AlignButton = ({textAlign, onChange}: Props) => {
     const handleAlignment = (
         event: React.MouseEvent<HTMLElement>,
-        newAlignment: string,
+        newAlignment: string | undefined,
     ) => {
         if (onChange) {
-            onChange(newAlignment);
+            onChange(newAlignment || TextAlign.LEFT);
         }
     };
 
