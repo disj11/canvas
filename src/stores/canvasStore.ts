@@ -32,7 +32,8 @@ export class CanvasStore implements Store {
     onInit() {
         this.canvas.setWidth(this.width);
         this.canvas.setHeight(this.height);
-        this.canvas.setBackgroundColor(this.backgroundColor, () => {});
+        this.canvas.backgroundColor = this.backgroundColor;
+        this.canvas.renderAll();
         this.setCanvasMode(this.canvasMode);
     }
 
@@ -48,7 +49,8 @@ export class CanvasStore implements Store {
         const previousMode = this.canvasMode;
         this.canvasMode = mode;
 
-        this.canvas.discardActiveObject().renderAll();
+        this.canvas.discardActiveObject();
+        this.canvas.renderAll();
         this.setAllCursor("default");
         this.setSelectable(false)
 
@@ -90,6 +92,7 @@ export class CanvasStore implements Store {
 
     setBackgroundColor(color: string) {
         this.backgroundColor = color;
-        this.canvas.setBackgroundColor(color, () => {});
+        this.canvas.backgroundColor = color;
+        this.canvas.renderAll();
     }
 }

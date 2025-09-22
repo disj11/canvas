@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { BrushType } from "models/tools/Brush";
 import { RootStore, Store } from "./rootStore";
-import { fabric } from "fabric";
+import * as fabric from "fabric";
 import { SelectionEventStore } from "./selectionEventStore";
 import { CanvasModeManager } from "./canvasStore";
 import { ToolTypes } from "models/tools/ToolTypes";

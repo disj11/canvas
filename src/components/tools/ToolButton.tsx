@@ -1,41 +1,40 @@
 import React from "react";
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from "clsx";
-
-const useStyles = makeStyles((theme) => ({
-    button: {
-        minHeight: 48,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-        paddingTop: theme.spacing(0.5),
-        paddingBottom: theme.spacing(0.5),
-        paddingRight: theme.spacing(3),
-        paddingLeft: theme.spacing(3),
-        "&:hover": {
-            backgroundColor: theme.palette.secondary.main,
-        }
-    },
-    caption: {
-        marginTop: theme.spacing(0.5),
-        fontSize: "0.70rem",
-    },
-    selected: {
-        backgroundColor: theme.palette.secondary.main,
-    }
-}));
+import {Box} from "@mui/material";
+import {Theme} from "@mui/material/styles";
 
 const ToolButton = ({icon, text, onClick, selected}: Props) => {
-    const classes = useStyles();
     return (
-        <div className={clsx(classes.button, {
-            [classes.selected]: selected,
-        })} onClick={onClick}>
+        <Box
+            sx={{
+                minHeight: 48,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                paddingTop: 0.5,
+                paddingBottom: 0.5,
+                paddingRight: 3,
+                paddingLeft: 3,
+                "&:hover": {
+                    backgroundColor: 'secondary.main',
+                },
+                ...(selected && {
+                    backgroundColor: 'secondary.main',
+                })
+            }}
+            onClick={onClick}
+        >
             {icon}
-            <div className={classes.caption}>{text}</div>
-        </div>
+            <Box
+                sx={{
+                    marginTop: 0.5,
+                    fontSize: "0.70rem",
+                }}
+            >
+                {text}
+            </Box>
+        </Box>
     )
 }
 

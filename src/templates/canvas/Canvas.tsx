@@ -1,42 +1,15 @@
 import React from "react";
 import {Layout} from "../layout";
-import makeStyles from '@mui/styles/makeStyles';
 import {ToolBox} from "../../components/tools";
 import {observer} from "mobx-react";
 import {Toolbar} from "@mui/material";
 import {useStores} from "../../hooks/useStores";
 import {PropBox} from "../../components/propbox";
+import {Box} from "@mui/system";
 
 const leftMenuWidth = 260;
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
-        flexDirection: "column",
-        width: "100vw",
-        height: "100vh",
-    },
-    flexBox: {
-        display: "flex",
-        flex: 1,
-    },
-    contents: {
-        display: "flex",
-    },
-    left: {
-        flexBasis: `${leftMenuWidth}px`,
-    },
-    canvasWrapper: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flex: 1,
-        backgroundColor: theme.palette.grey.A400,
-        padding: theme.spacing(3),
-    },
-}))
 
 const Canvas = observer(() => {
-    const classes = useStyles();
     const rootStore = useStores();
     const canvasRef = React.useRef<HTMLDivElement>(null);
 
@@ -53,15 +26,41 @@ const Canvas = observer(() => {
     return (
         <Layout>
             <ToolBox/>
-            <div className={classes.root}>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100vw",
+                    height: "100vh",
+                }}
+            >
                 <Toolbar variant={"dense"}/>
-                <div className={classes.flexBox}>
-                    <div className={classes.left}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flex: 1,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            flexBasis: `${leftMenuWidth}px`,
+                        }}
+                    >
                         <PropBox/>
-                    </div>
-                    <div className={classes.canvasWrapper} ref={canvasRef}/>
-                </div>
-            </div>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flex: 1,
+                            backgroundColor: 'grey.400',
+                            padding: 3,
+                        }}
+                        ref={canvasRef}
+                    />
+                </Box>
+            </Box>
         </Layout>
     )
 })

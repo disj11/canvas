@@ -1,4 +1,4 @@
-import { fabric } from "fabric";
+import * as fabric from "fabric";
 import { BrushStore } from "./brushStore";
 import { CanvasStore } from "./canvasStore";
 import { MouseEventStore } from "./mouseEventStore";

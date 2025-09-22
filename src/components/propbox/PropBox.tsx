@@ -1,6 +1,5 @@
 import React from "react";
 import {observer} from "mobx-react";
-import makeStyles from '@mui/styles/makeStyles';
 import {useStores} from "../../hooks/useStores";
 import {ToolTypes} from "../../models/tools/ToolTypes";
 import BrushPropBox from "./BrushPropBox";
@@ -9,23 +8,21 @@ import TextPropBox from "./TextPropBox";
 import CanvasPropBox from "./CanvasPropBox";
 import SelectPropBox from "./SelectPropBox";
 import ImagePropBox from "./ImagePropBox";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(3),
-        height: "100%",
-    }
-}));
+import {Box} from "@mui/material";
 
 const PropBox = observer(() => {
-    const classes = useStyles();
     const {canvasStore, objectStore} = useStores();
     const selectedTool = canvasStore.canvasMode;
     const activeObject = objectStore.activeObject;
 
     return (
         <React.Fragment>
-            <div className={classes.root}>
+            <Box
+                sx={{
+                    padding: 3,
+                    height: "100%",
+                }}
+            >
                 {!activeObject && <React.Fragment>
                     {selectedTool === ToolTypes.SELECT && (<SelectPropBox/>)}
                     {selectedTool === ToolTypes.BRUSH && (<BrushPropBox/>)}
@@ -40,7 +37,7 @@ const PropBox = observer(() => {
                     {objectStore.isText() && <TextPropBox/>}
                     {objectStore.isImage() && <ImagePropBox/>}
                 </React.Fragment>}
-            </div>
+            </Box>
         </React.Fragment>
     )
 })
